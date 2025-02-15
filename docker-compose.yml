@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  crunchflow:
+    image: katemaher/crunchflow:optimized210  # Pulls the pre-built CrunchFlow image
+    container_name: crunchflow_container
+    stdin_open: true  # Keeps the container interactive
+    tty: true  # Allows terminal access
+    volumes:
+      - ./data:/home/crunch_user/files  # Mounts local 'data' folder to the container
+    working_dir: /home/crunch_user/files  # Default working directory
+    command: /bin/bash  # Opens a bash shell inside the container
+
+  jupyter:
+    image: katemaher/crunchflow:optimized210  # Same image with Jupyter support
+    container_name: crunchflow_jupyter
+    ports:
+      - "8888:8888"  # Exposes Jupyter Notebook on localhost
+    volumes:
+      - ./data:/home/crunch_user/files  # Shares the same folder for file access
+    working_dir: /home/crunch_user/files
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
