@@ -6,7 +6,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Copy the current directory contents (including app.py and requirements.txt) into the container at /app
-COPY . /app
+COPY ./python/. /app
 
 # Install Flask (and any other dependencies you list in requirements.txt)
 RUN pip install --no-cache-dir -r requirements.txt
