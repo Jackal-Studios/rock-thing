@@ -1,9 +1,0 @@
-distance_units       centimeters                                                                                                                                                                                                                                        
-time_units           seconds                                                                                                                                                                                                                                            
-fix_diffusion        0.919E-05                                                                                                                                                                                                                                          
-formation_factor      1.0                                                                                                                                                                                                                                               
-cementation_exponent  1.0                                                                                                                                                                                                                                               
-dispersivity          1                                                                                                                                                                                                                                                 
-gas_diffusion        1.E-01                                                                                                                                                                                                                                             
-
-
