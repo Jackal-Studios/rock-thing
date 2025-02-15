@@ -18,6 +18,8 @@ services:
   flask-app:
     build: .
     container_name: flask-app
+    volumes:
+      - ./python:/app/
     environment:
       - FLASK_APP=/app/app.py  # The name of your Flask app
       - FLASK_ENV=development  # Optional, use 'production' in production
