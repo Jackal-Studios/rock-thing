@@ -1,57 +1,47 @@
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-
-.calculation-box {
-    height: 75px;
-    width: 200px;
-    position: absolute;
-    bottom: 40px;
-    left: 10px;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 15px;
-    text-align: center;
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
 }
 
-.dropdown-box {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: white;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+#map {
+    width: 75%;
+    height: 100vh;  /* Full viewport height */
 }
 
-.dropdown-box label {
+.sidebar {
+    width: 25%;
+    height: 100vh;  /* Full viewport height */
+    background-color: #f8f8f8;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.dropdown-box, .input-box {
+    margin-bottom: 20px;
+}
+
+.dropdown-box label, .input-box label {
     display: block;
-    margin-top: 5px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-.dropdown-box select {
+.dropdown-box select, .input-box input {
     width: 100%;
-    padding: 5px;
-    margin-top: 3px;
-}
-
-p {
-    font-family: 'Open Sans';
-    margin: 0;
-    font-size: 13px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 #run-button {
-    position: absolute;
-    top: 100px;
-    left: 10px;
     padding: 10px 20px;
     background-color: #007cbf;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    z-index: 1000;
 }
 
 #run-button:hover {
@@ -81,4 +71,10 @@ p {
 
 .modal p {
     font-size: 18px;
+}
+
+p {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
 }

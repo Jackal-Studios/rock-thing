@@ -2,10 +2,20 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0Y3Jhd2ZvcmQiLCJhIjoiY203NXJ0ZTR6MDB3MzJuc
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/satellite-v9',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
     center: [-91.874, 42.76],
     zoom: 0
 });
+
+const layerList = document.getElementById('menu');
+const inputs = layerList.getElementsByTagName('input');
+
+for (const input of inputs) {
+    input.onclick = (layer) => {
+        const layerId = layer.target.id;
+        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    };
+}
 
 let centerPoint = null;
 let radiusCircle = null;
