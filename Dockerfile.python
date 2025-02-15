@@ -1,0 +1,84 @@
+# FROM python:3.10-slim
+
+# WORKDIR /app
+
+# # Install system dependencies
+# RUN apt-get update && apt-get install -y \
+#     gcc \
+#     && rm -rf /var/lib/apt/lists/*
+
+# # Copy and install Python dependencies
+# COPY ./python/requirements.txt .
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# # Add Docker's official GPG key and repository
+# RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
+#     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
+#     > /etc/apt/sources.list.d/docker.list
+
+
+# # Install Docker CLI
+# RUN apt-get update && apt-get install -y \
+#     docker-ce-cli \
+#     && rm -rf /var/lib/apt/lists/*
+
+# # Copy application code
+# COPY ./python/. .
+
+# EXPOSE 5000
+# CMD ["flask", "run", "--host=0.0.0.0"]
+
+
+# Use Debian Bookworm slim for smaller image size
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install Python, Docker, and other dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    gcc \
+    docker.io \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a symbolic link for python3 to python
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# # Add Docker's official GPG key and repository
+# RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
+#     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
+#     > /etc/apt/sources.list.d/docker.list
+
+
+# # Install Docker CLI
+# RUN apt-get update && apt-get install -y \
+#     docker-ce-cli \
+#     && rm -rf /var/lib/apt/lists/*
+
+
+# Copy and install Python dependencies
+# COPY ./python/requirements.txt .
+# RUN pip3 install --no-cache-dir -r requirements.txt
+
+RUN pip3 install --no-cache-dir --break-system-packages \ 
+    Flask==2.0.3 \
+    werkzeug==2.0.3 \
+    qiskit==1.2.4 \
+    qiskit-aer==0.15.1 \
+    numpy==1.26.4 \
+    crunchflow=2.0.4 \
+    pydgsa=1.0.5 \
+    pyemu=1.3.5
+    
+# Copy application code
+COPY ./python/. .
+
+EXPOSE 5000
+
+# Set the working directory and start Flask
+WORKDIR /app
+CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]

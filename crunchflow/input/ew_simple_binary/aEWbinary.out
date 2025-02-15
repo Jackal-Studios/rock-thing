@@ -1,0 +1,551 @@
+
+  ************************** CrunchFlow ******************************
+    
+                   Authors:  C.I. STEEFEL, S. MOLINS 
+                       *** Copyright Notice ***          
+  �CrunchFlow�, Copyright (c) 2016, The Regents of the University of California, through Lawrence Berkeley National Laboratory
+  (subject to receipt of any required approvals from the U.S. Dept. of Energy).� All rights reserved.
+
+  If you have questions about your rights to use or distribute this software, please contact 
+  Berkeley Lab Innovation & Partnerships Office at��IPO@lbl.gov.  
+
+  NOTICE.� This Software was developed under funding from the U.S. Department of Energy and the U.S. Government 
+  consequently retains certain rights. As such, the U.S. Government has been granted for itself and others acting 
+  on its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software to reproduce, distribute copies to the public, 
+  prepare derivative works, and perform publicly and display publicly, and to permit other to do so.
+    
+
+
+  EW simulation with binary feedstock and soil                            
+
+
+
+   ---> Using database: datacom_DEIbasalt_15April2014_allkinetics.dbs                                                       
+
+
+ Number of components =                    11
+
+  1 H+                
+  2 CO2(aq)           
+  3 Mg++              
+  4 Ca++              
+  5 K+                
+  6 SiO2(aq)          
+  7 Na+               
+  8 Al+++             
+  9 Cl-               
+ 10 NO3-              
+ 11 Tracer            
+
+ Number of secondary species in input file =           24
+
+  1 Al(OH)2+          
+  2 AlO2-             
+  3 AlOH++            
+  4 CaCl+             
+  5 CaCl2(aq)         
+  6 HCO3-             
+  7 H2SiO4--          
+  8 HAlO2(aq)         
+  9 HCl(aq)           
+ 10 HSiO3-            
+ 11 KCl(aq)           
+ 12 MgCl+             
+ 13 NaAlO2(aq)        
+ 14 NaCl(aq)          
+ 15 NaHSiO3(aq)       
+ 16 NaOH(aq)          
+ 17 OH-               
+ 18 CO3--             
+ 19 CaCO3(aq)         
+ 20 CaHCO3+           
+ 21 MgCO3(aq)         
+ 22 MgHCO3+           
+ 23 NaCO3-            
+ 24 NaHCO3(aq)        
+
+ Number of gases in input file =                1
+
+  1 CO2(g)            
+
+
+ Number of kinetic minerals =            3
+
+
+  Using database file: datacom_DEIbasalt_15April2014_allkinetics.dbs
+
+  temperature interpolation coefficients
+                  ln(T+Tk)        1         T+Tk      (T+Tk)**-1   (t+tk)**-2
+
+    HOMOGENEOUS REACTIONS
+
+ Species         log K         Stoichiometric Coefficients
+                            H+     CO2(aq Mg++   Ca++   K+     SiO2(a Na+    Al+++  Cl-    NO3-   Tracer 
+ Al(OH)2+            1.0592E+01  -2.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00
+ AlO2-               2.2868E+01  -4.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00
+ AlOH++              4.9506E+00  -1.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00
+ CaCl+               7.0039E-01   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00
+ CaCl2(aq)           6.5346E-01   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00   2.00   0.00   0.00
+ HCO3-               6.3414E+00  -1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+ H2SiO4--            2.2960E+01  -2.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00   0.00
+ HAlO2(aq)           1.6431E+01  -3.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00
+ HCl(aq)            -6.9993E-01   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00
+ HSiO3-              9.9422E+00  -1.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00   0.00
+ KCl(aq)             1.5004E+00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   1.00   0.00   0.00
+ MgCl+               1.3865E-01   0.00   0.00   1.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00
+ NaAlO2(aq)          2.3627E+01  -4.00   0.00   0.00   0.00   0.00   0.00   1.00   1.00   0.00   0.00   0.00
+ NaCl(aq)            7.8213E-01   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   1.00   0.00   0.00
+ NaHSiO3(aq)         8.2984E+00  -1.00   0.00   0.00   0.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00
+ NaOH(aq)            1.4799E+01  -1.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00
+ OH-                 1.3991E+01  -1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+ CO3--               1.6666E+01  -2.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+ CaCO3(aq)           1.3350E+01  -2.00   1.00   0.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+ CaHCO3+             5.2986E+00  -1.00   1.00   0.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+ MgCO3(aq)           1.3698E+01  -2.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+ MgHCO3+             5.3086E+00  -1.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+ NaCO3-              1.6157E+01  -2.00   1.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00
+ NaHCO3(aq)          6.1857E+00  -1.00   1.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00
+
+      MINERAL REACTIONS
+
+ Mineral         log K         Stoichiometric Coefficients
+                            H+     CO2(aq Mg++   Ca++   K+     SiO2(a Na+    Al+++  Cl-    NO3-   Tracer 
+ An50Ab50AS          1.4188E+01  -6.00   0.00   0.00   0.50   0.00   2.50   0.50   1.50   0.00   0.00   0.00
+ Kaolinite           6.7973E+00  -6.00   0.00   0.00   0.00   0.00   2.00   0.00   2.00   0.00   0.00   0.00
+ CO2_pump            9.9853E+02   0.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+
+     GAS REACTIONS
+
+ Gases           log K         Stoichiometric Coefficients
+                            H+     CO2(aq Mg++   Ca++   K+     SiO2(a Na+    Al+++  Cl-    NO3-   Tracer 
+ CO2(g)             -1.4677E+00   0.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+
+  ***KINETIC INPUTS***
+
+   MINERAL
+
+
+  ******  GEOCHEMICAL CONDITIONS INPUT  ******
+
+ Number of geochemical conditions specified =            3
+
+  Condition Label: solutewater
+
+
+  Primary species    itype     guess      Total conc.  Constraint phase
+  H+                   7    7.4131E-06    0.0000E+00                       
+  CO2(aq)              4    1.0000E-06    4.5000E-04     CO2(g)            
+  Mg++                 1    1.0000E-06    6.0000E-05                       
+  Ca++                 1    1.0000E-06    9.0000E-05                       
+  K+                   1    1.0000E-06    1.0000E-05                       
+  SiO2(aq)             1    1.0000E-06    1.0000E-07                       
+  Na+                  1    1.0000E-06    4.0000E-04                       
+  Al+++                1    1.0000E-06    2.0000E-07                       
+  Cl-                  1    1.0000E-06    5.1717E-04                       
+  NO3-                 1    1.0000E-06    1.0000E-04                       
+  Tracer               1    1.0000E-06    1.0000E-04                       
+
+  Porosity for this chemical condition =   1.0000
+
+
+
+  Condition Label: feedstock
+
+
+  Primary species    itype     guess      Total conc.  Constraint phase
+  H+                   7    1.0000E-05    0.0000E+00                       
+  CO2(aq)              4    1.0000E-06    4.5000E-04     CO2(g)            
+  Mg++                 1    1.0000E-06    6.0000E-05                       
+  Ca++                 1    1.0000E-06    9.0000E-05                       
+  K+                   1    1.0000E-06    1.0000E-05                       
+  SiO2(aq)             1    1.0000E-06    1.0000E-07                       
+  Na+                  1    1.0000E-06    4.0000E-04                       
+  Al+++                1    1.0000E-06    2.0000E-07                       
+  Cl-                  1    1.0000E-06    5.2008E-04                       
+  NO3-                 1    1.0000E-06    1.0000E-04                       
+  Tracer               1    1.0000E-06    1.0000E-08                       
+
+  Porosity for this chemical condition =   0.8669
+
+
+
+  Condition Label: nativesoil
+
+
+  Primary species    itype     guess      Total conc.  Constraint phase
+  H+                   7    1.0000E-05    0.0000E+00                       
+  CO2(aq)              4    1.0000E-06    3.0000E-03     CO2(g)            
+  Mg++                 1    1.0000E-06    6.0000E-05                       
+  Ca++                 1    1.0000E-06    9.0000E-05                       
+  K+                   1    1.0000E-06    1.0000E-05                       
+  SiO2(aq)             1    1.0000E-06    1.0000E-07                       
+  Na+                  1    1.0000E-06    4.0000E-04                       
+  Al+++                1    1.0000E-06    2.0000E-07                       
+  Cl-                  1    1.0000E-06    5.1716E-04                       
+  NO3-                 1    1.0000E-06    1.0000E-04                       
+  Tracer               1    1.0000E-06    1.0000E-08                       
+
+  Porosity for this chemical condition =   0.8700
+
+
+
+   ********  SPECIATION OF GEOCHEMICAL CONDITIONS  ********
+
+
+ *********************************************
+  ---> GEOCHEMICAL CONDITION: solutewater
+
+  Temperature (C)         =     25.000
+  Porosity                =      1.000
+  Liquid Saturation       =      0.500
+  Liquid Density (kg/m^3) =    997.075
+  Solid Density (kg/m^3)  =      0.000
+  Solid:Solution Ratio    =      0.000
+  Ionic Strength          =      0.001
+  Solution pH             =      5.130
+  Total Charge            =  9.995E-05
+
+ Total Aqueous Concentrations of Primary Species  
+ --------------------------------------- 
+
+ Species                Molality     Constraint    Constraint Phase 
+ H+                  6.52425E-06     Activity                        
+ CO2(aq)             1.62999E-05     Gas           CO2(g)            
+ Mg++                6.00000E-05     Total                           
+ Ca++                9.00000E-05     Total                           
+ K+                  1.00000E-05     Total                           
+ SiO2(aq)            1.00000E-07     Total                           
+ Na+                 4.00000E-04     Total                           
+ Al+++               2.00000E-07     Total                           
+ Cl-                 5.17170E-04     Total                           
+ NO3-                1.00000E-04     Total                           
+ Tracer              1.00000E-04     Total                           
+
+ Exchangers        Equiv/kgw        Equiv/g solid  Equiv/m^3 bulk
+XKaol-             0.0000E+00       0.0000E+00
+
+ Total Concentrations in Exchange Sites 
+ -------------------------------------- 
+
+ Primary Species   Moles/kgw       Moles/g solid   Equiv/g solid
+
+ Concentrations of Individual Species, Exchangers, and Surface Complexes 
+ ----------------------------------------------------------------------- 
+
+                           Log        Log                                 Activity
+ Species              Molality   Activity      Molality      Activity   Coefficient    Type
+  Kaol-Na             -100.000   -100.000     0.000E+00     0.000E+00                Exchange
+  Kaol-K              -100.000   -100.000     0.000E+00     0.000E+00                Exchange
+  Kaol-Ca             -100.000   -100.000     0.000E+00     0.000E+00                Exchange
+  Kaol-Mg             -100.000   -100.000     0.000E+00     0.000E+00                Exchange
+  H+                    -5.117     -5.130     7.646E-06     7.413E-06     9.695E-01  Aqueous 
+  CO2(aq)               -4.815     -4.815     1.532E-05     1.533E-05     1.000E+00  Aqueous 
+  Mg++                  -4.222     -4.276     5.998E-05     5.292E-05     8.823E-01  Aqueous 
+  Ca++                  -4.046     -4.101     8.999E-05     7.922E-05     8.803E-01  Aqueous 
+  K+                    -5.000     -5.014     1.000E-05     9.678E-06     9.678E-01  Aqueous 
+  SiO2(aq)              -7.000     -7.000     1.000E-07     1.000E-07     1.000E+00  Aqueous 
+  Na+                   -3.398     -3.412     4.000E-04     3.872E-04     9.681E-01  Aqueous 
+  Al+++                 -7.136     -7.258     7.309E-08     5.527E-08     7.562E-01  Aqueous 
+  Cl-                   -3.286     -3.301     5.171E-04     5.005E-04     9.678E-01  Aqueous 
+  NO3-                  -4.000     -4.014     1.000E-04     9.678E-05     9.678E-01  Aqueous 
+  Tracer                -4.000     -4.000     1.000E-04     1.000E-04     1.000E+00  Aqueous 
+  Al(OH)2+              -7.576     -7.590     2.657E-08     2.572E-08     9.681E-01  Aqueous 
+  AlO2-                 -9.591     -9.605     2.564E-10     2.482E-10     9.681E-01  Aqueous 
+  AlOH++                -7.022     -7.078     9.505E-08     8.353E-08     8.788E-01  Aqueous 
+  CaCl+                 -8.088     -8.102     8.164E-09     7.903E-09     9.681E-01  Aqueous 
+  CaCl2(aq)            -11.356    -11.356     4.406E-12     4.407E-12     1.000E+00  Aqueous 
+  HCO3-                 -6.012     -6.026     9.730E-07     9.420E-07     9.681E-01  Aqueous 
+  H2SiO4--             -19.644    -19.700     2.272E-20     1.996E-20     8.783E-01  Aqueous 
+  HAlO2(aq)             -8.298     -8.298     5.031E-09     5.032E-09     1.000E+00  Aqueous 
+  HCl(aq)               -7.731     -7.731     1.859E-08     1.859E-08     1.000E+00  Aqueous 
+  HSiO3-               -11.798    -11.812     1.592E-12     1.541E-12     9.681E-01  Aqueous 
+  KCl(aq)               -9.815     -9.815     1.530E-10     1.530E-10     1.000E+00  Aqueous 
+  MgCl+                 -7.702     -7.716     1.988E-08     1.925E-08     9.681E-01  Aqueous 
+  NaAlO2(aq)           -13.776    -13.776     1.673E-14     1.674E-14     1.000E+00  Aqueous 
+  NaCl(aq)              -7.495     -7.495     3.200E-08     3.200E-08     1.000E+00  Aqueous 
+  NaHSiO3(aq)          -13.580    -13.580     2.628E-14     2.628E-14     1.000E+00  Aqueous 
+  NaOH(aq)             -13.081    -13.081     8.303E-14     8.305E-14     1.000E+00  Aqueous 
+  OH-                   -8.847     -8.861     1.422E-09     1.377E-09     9.680E-01  Aqueous 
+  CO3--                -11.165    -11.221     6.844E-12     6.014E-12     8.788E-01  Aqueous 
+  CaCO3(aq)            -12.006    -12.006     9.864E-13     9.866E-13     1.000E+00  Aqueous 
+  CaHCO3+               -9.070     -9.084     8.508E-10     8.237E-10     9.681E-01  Aqueous 
+  MgCO3(aq)            -12.529    -12.529     2.961E-13     2.961E-13     1.000E+00  Aqueous 
+  MgHCO3+               -9.255     -9.269     5.554E-10     5.377E-10     9.681E-01  Aqueous 
+  NaCO3-               -14.110    -14.124     7.771E-15     7.523E-15     9.681E-01  Aqueous 
+  NaHCO3(aq)            -9.282     -9.282     5.220E-10     5.221E-10     1.000E+00  Aqueous 
+
+
+  ****** Partial pressure of gases (bars) *****
+
+ CO2(g)               4.50000000E-04
+
+  ****** Saturation state of minerals (log[Q/K] *****
+
+  An50Ab50AS              -15.5510
+  Omega                     2.8119125707993927E-016
+  Kaolinite                -4.5321
+  Omega                     2.9367580823074016E-005
+  CO2_pump              -1003.3468
+  Omega                     0.0000000000000000     
+
+ *********************************************
+  ---> GEOCHEMICAL CONDITION: feedstock
+
+  Temperature (C)         =     25.000
+  Porosity                =      0.867
+  Liquid Saturation       =      0.500
+  Liquid Density (kg/m^3) =    997.075
+  Solid Density (kg/m^3)  = **********
+  Solid:Solution Ratio    = **********
+  Ionic Strength          =      0.001
+  Solution pH             =      5.000
+  Total Charge            =  1.000E-04
+
+ Total Aqueous Concentrations of Primary Species  
+ --------------------------------------- 
+
+ Species                Molality     Constraint    Constraint Phase 
+ H+                  9.48411E-06     Activity                        
+ CO2(aq)             1.60478E-05     Gas           CO2(g)            
+ Mg++                6.00000E-05     Total                           
+ Ca++                9.00000E-05     Total                           
+ K+                  1.00000E-05     Total                           
+ SiO2(aq)            1.00000E-07     Total                           
+ Na+                 4.00000E-04     Total                           
+ Al+++               2.00000E-07     Total                           
+ Cl-                 5.20080E-04     Total                           
+ NO3-                1.00000E-04     Total                           
+ Tracer              1.00000E-08     Total                           
+
+ Exchangers        Equiv/kgw        Equiv/g solid  Equiv/m^3 bulk
+XKaol-             2.4569E-01       2.4290E-10     2.1236E+02
+
+ Total Concentrations in Exchange Sites 
+ -------------------------------------- 
+
+ Primary Species   Moles/kgw       Moles/g solid   Equiv/g solid
+Mg++               4.0190E-02       3.9734E-11     7.9468E-11
+Ca++               8.1160E-02       8.0240E-11     1.6048E-10
+K+                 2.0979E-04       2.0741E-13     2.0741E-13
+Na+                2.7793E-03       2.7478E-12     2.7478E-12
+
+ Concentrations of Individual Species, Exchangers, and Surface Complexes 
+ ----------------------------------------------------------------------- 
+
+                           Log        Log                                 Activity
+ Species              Molality   Activity      Molality      Activity   Coefficient    Type
+  Kaol-Na               -2.556     -1.946     2.779E-03     1.131E-02                Exchange
+  Kaol-K                -3.678     -3.069     2.098E-04     8.539E-04                Exchange
+  Kaol-Ca               -1.091     -0.180     8.116E-02     6.607E-01                Exchange
+  Kaol-Mg               -1.396     -0.485     4.019E-02     3.272E-01                Exchange
+  H+                    -4.987     -5.000     1.032E-05     1.000E-05     9.695E-01  Aqueous 
+  CO2(aq)               -4.815     -4.815     1.532E-05     1.533E-05     1.000E+00  Aqueous 
+  Mg++                  -4.222     -4.276     5.998E-05     5.291E-05     8.821E-01  Aqueous 
+  Ca++                  -4.046     -4.101     8.999E-05     7.921E-05     8.801E-01  Aqueous 
+  K+                    -5.000     -5.014     1.000E-05     9.678E-06     9.678E-01  Aqueous 
+  SiO2(aq)              -7.000     -7.000     1.000E-07     1.000E-07     1.000E+00  Aqueous 
+  Na+                   -3.398     -3.412     4.000E-04     3.872E-04     9.681E-01  Aqueous 
+  Al+++                 -7.040     -7.161     9.121E-08     6.895E-08     7.559E-01  Aqueous 
+  Cl-                   -3.284     -3.298     5.200E-04     5.032E-04     9.678E-01  Aqueous 
+  NO3-                  -4.000     -4.014     1.000E-04     9.678E-05     9.678E-01  Aqueous 
+  Tracer                -8.000     -8.000     1.000E-08     1.000E-08     1.000E+00  Aqueous 
+  Al(OH)2+              -7.740     -7.754     1.822E-08     1.763E-08     9.681E-01  Aqueous 
+  AlO2-                -10.015    -10.029     9.658E-11     9.350E-11     9.681E-01  Aqueous 
+  AlOH++                -7.056     -7.112     8.792E-08     7.725E-08     8.786E-01  Aqueous 
+  CaCl+                 -8.086     -8.100     8.208E-09     7.946E-09     9.681E-01  Aqueous 
+  CaCl2(aq)            -11.351    -11.351     4.454E-12     4.455E-12     1.000E+00  Aqueous 
+  HCO3-                 -6.142     -6.156     7.213E-07     6.983E-07     9.681E-01  Aqueous 
+  H2SiO4--             -19.903    -19.960     1.249E-20     1.097E-20     8.781E-01  Aqueous 
+  HAlO2(aq)             -8.592     -8.592     2.557E-09     2.557E-09     1.000E+00  Aqueous 
+  HCl(aq)               -7.598     -7.598     2.521E-08     2.522E-08     1.000E+00  Aqueous 
+  HSiO3-               -11.928    -11.942     1.180E-12     1.143E-12     9.681E-01  Aqueous 
+  KCl(aq)               -9.813     -9.813     1.539E-10     1.539E-10     1.000E+00  Aqueous 
+  MgCl+                 -7.699     -7.713     1.999E-08     1.935E-08     9.681E-01  Aqueous 
+  NaAlO2(aq)           -14.200    -14.200     6.303E-15     6.305E-15     1.000E+00  Aqueous 
+  NaCl(aq)              -7.492     -7.492     3.217E-08     3.218E-08     1.000E+00  Aqueous 
+  NaHSiO3(aq)          -13.710    -13.710     1.948E-14     1.948E-14     1.000E+00  Aqueous 
+  NaOH(aq)             -13.211    -13.211     6.155E-14     6.156E-14     1.000E+00  Aqueous 
+  OH-                   -8.977     -8.991     1.055E-09     1.021E-09     9.679E-01  Aqueous 
+  CO3--                -11.425    -11.481     3.762E-12     3.305E-12     8.786E-01  Aqueous 
+  CaCO3(aq)            -12.266    -12.266     5.420E-13     5.421E-13     1.000E+00  Aqueous 
+  CaHCO3+               -9.200     -9.214     6.306E-10     6.105E-10     9.681E-01  Aqueous 
+  MgCO3(aq)            -12.789    -12.789     1.627E-13     1.627E-13     1.000E+00  Aqueous 
+  MgHCO3+               -9.385     -9.400     4.117E-10     3.985E-10     9.681E-01  Aqueous 
+  NaCO3-               -14.370    -14.384     4.271E-15     4.134E-15     9.681E-01  Aqueous 
+  NaHCO3(aq)            -9.412     -9.412     3.869E-10     3.870E-10     1.000E+00  Aqueous 
+
+
+  ****** Partial pressure of gases (bars) *****
+
+ CO2(g)               4.50000000E-04
+
+  ****** Saturation state of minerals (log[Q/K] *****
+
+  An50Ab50AS              -16.1870
+  Omega                     6.5010733004709102E-017
+  Kaolinite                -5.1201
+  Omega                     7.5843004322081569E-006
+  CO2_pump              -1003.3468
+  Omega                     0.0000000000000000     
+
+ *********************************************
+  ---> GEOCHEMICAL CONDITION: nativesoil
+
+  Temperature (C)         =     25.000
+  Porosity                =      0.870
+  Liquid Saturation       =      0.500
+  Liquid Density (kg/m^3) =    997.075
+  Solid Density (kg/m^3)  =   2650.000
+  Solid:Solution Ratio    =    794.277
+  Ionic Strength          =      0.001
+  Solution pH             =      5.000
+  Total Charge            =  9.883E-05
+
+ Total Aqueous Concentrations of Primary Species  
+ --------------------------------------- 
+
+ Species                Molality     Constraint    Constraint Phase 
+ H+                  5.38831E-06     Activity                        
+ CO2(aq)             1.06985E-04     Gas           CO2(g)            
+ Mg++                6.00000E-05     Total                           
+ Ca++                9.00000E-05     Total                           
+ K+                  1.00000E-05     Total                           
+ SiO2(aq)            1.00000E-07     Total                           
+ Na+                 4.00000E-04     Total                           
+ Al+++               2.00000E-07     Total                           
+ Cl-                 5.17160E-04     Total                           
+ NO3-                1.00000E-04     Total                           
+ Tracer              1.00000E-08     Total                           
+
+ Exchangers        Equiv/kgw        Equiv/g solid  Equiv/m^3 bulk
+XKaol-             9.0969E-02       1.1453E-04     7.8911E+01
+
+ Total Concentrations in Exchange Sites 
+ -------------------------------------- 
+
+ Primary Species   Moles/kgw       Moles/g solid   Equiv/g solid
+Mg++               1.4881E-02       1.8735E-05     3.7470E-05
+Ca++               3.0050E-02       3.7833E-05     7.5667E-05
+K+                 7.7678E-05       9.7797E-08     9.7797E-08
+Na+                1.0291E-03       1.2956E-06     1.2956E-06
+
+ Concentrations of Individual Species, Exchangers, and Surface Complexes 
+ ----------------------------------------------------------------------- 
+
+                           Log        Log                                 Activity
+ Species              Molality   Activity      Molality      Activity   Coefficient    Type
+  Kaol-Na               -2.988     -1.946     1.029E-03     1.131E-02                Exchange
+  Kaol-K                -4.110     -3.069     7.768E-05     8.539E-04                Exchange
+  Kaol-Ca               -1.522     -0.180     3.005E-02     6.607E-01                Exchange
+  Kaol-Mg               -1.827     -0.485     1.488E-02     3.272E-01                Exchange
+  H+                    -4.987     -5.000     1.032E-05     1.000E-05     9.694E-01  Aqueous 
+  CO2(aq)               -3.991     -3.991     1.022E-04     1.022E-04     1.000E+00  Aqueous 
+  Mg++                  -4.222     -4.277     5.998E-05     5.291E-05     8.821E-01  Aqueous 
+  Ca++                  -4.046     -4.101     8.999E-05     7.920E-05     8.801E-01  Aqueous 
+  K+                    -5.000     -5.014     1.000E-05     9.678E-06     9.678E-01  Aqueous 
+  SiO2(aq)              -7.000     -7.000     1.000E-07     1.000E-07     1.000E+00  Aqueous 
+  Na+                   -3.398     -3.412     4.000E-04     3.872E-04     9.681E-01  Aqueous 
+  Al+++                 -7.040     -7.162     9.121E-08     6.894E-08     7.558E-01  Aqueous 
+  Cl-                   -3.286     -3.301     5.171E-04     5.004E-04     9.678E-01  Aqueous 
+  NO3-                  -4.000     -4.014     1.000E-04     9.678E-05     9.678E-01  Aqueous 
+  Tracer                -8.000     -8.000     1.000E-08     1.000E-08     1.000E+00  Aqueous 
+  Al(OH)2+              -7.740     -7.754     1.821E-08     1.763E-08     9.681E-01  Aqueous 
+  AlO2-                -10.015    -10.029     9.658E-11     9.349E-11     9.681E-01  Aqueous 
+  AlOH++                -7.056     -7.112     8.792E-08     7.724E-08     8.786E-01  Aqueous 
+  CaCl+                 -8.088     -8.102     8.161E-09     7.901E-09     9.681E-01  Aqueous 
+  CaCl2(aq)            -11.356    -11.356     4.404E-12     4.405E-12     1.000E+00  Aqueous 
+  HCO3-                 -5.318     -5.332     4.809E-06     4.655E-06     9.681E-01  Aqueous 
+  H2SiO4--             -19.903    -19.960     1.249E-20     1.097E-20     8.781E-01  Aqueous 
+  HAlO2(aq)             -8.592     -8.592     2.556E-09     2.557E-09     1.000E+00  Aqueous 
+  HCl(aq)               -7.601     -7.601     2.507E-08     2.508E-08     1.000E+00  Aqueous 
+  HSiO3-               -11.928    -11.942     1.180E-12     1.143E-12     9.681E-01  Aqueous 
+  KCl(aq)               -9.815     -9.815     1.530E-10     1.530E-10     1.000E+00  Aqueous 
+  MgCl+                 -7.702     -7.716     1.987E-08     1.924E-08     9.681E-01  Aqueous 
+  NaAlO2(aq)           -14.200    -14.200     6.303E-15     6.304E-15     1.000E+00  Aqueous 
+  NaCl(aq)              -7.495     -7.495     3.199E-08     3.200E-08     1.000E+00  Aqueous 
+  NaHSiO3(aq)          -13.710    -13.710     1.948E-14     1.948E-14     1.000E+00  Aqueous 
+  NaOH(aq)             -13.211    -13.211     6.155E-14     6.156E-14     1.000E+00  Aqueous 
+  OH-                   -8.977     -8.991     1.055E-09     1.021E-09     9.679E-01  Aqueous 
+  CO3--                -10.601    -10.657     2.508E-11     2.203E-11     8.786E-01  Aqueous 
+  CaCO3(aq)            -11.442    -11.442     3.613E-12     3.613E-12     1.000E+00  Aqueous 
+  CaHCO3+               -8.376     -8.390     4.204E-09     4.070E-09     9.681E-01  Aqueous 
+  MgCO3(aq)            -11.965    -11.965     1.084E-12     1.085E-12     1.000E+00  Aqueous 
+  MgHCO3+               -8.562     -8.576     2.744E-09     2.657E-09     9.681E-01  Aqueous 
+  NaCO3-               -13.546    -13.560     2.847E-14     2.756E-14     9.681E-01  Aqueous 
+  NaHCO3(aq)            -8.588     -8.588     2.579E-09     2.580E-09     1.000E+00  Aqueous 
+
+
+  ****** Partial pressure of gases (bars) *****
+
+ CO2(g)               3.00000000E-03
+
+  ****** Saturation state of minerals (log[Q/K] *****
+
+  An50Ab50AS              -16.1871
+  Omega                     6.5001619728292663E-017
+  Kaolinite                -5.1201
+  Omega                     7.5833739363748023E-006
+  CO2_pump              -1002.5229
+  Omega                     0.0000000000000000     
+
+                SPECIATION OF  
+      INITIAL AND BOUNDARY CONDITIONS 
+           SUCCESSFULLY COMPLETED
+
+
+   NZ =            1
+
+  Cell  Distance (m)
+   1    5.000E-01
+
+
+ Number of heterogeneities =            2
+
+
+ Parameters for this run:
+
+  Maximum timestep (yrs) =    5.000E-01
+  Maximum timestep (yrs) =    1.000E-14
+
+ --> Porosity calculated from mineral volume fractions
+ ----> Porosity is updated due to mineral dissolution and precipitation reactions
+ --> Extended Debye-Huckel activity model used
+ --> Activity coefficients only computed
+     at beginning of time step 
+
+  Temperature (C) at J = 1            25.00
+  Temperature gradient (C/m) =         0.00
+
+ Graphics files printed at (yrs)
+   1.0000E+00
+   5.0000E+00
+   1.0000E+01
+   1.5000E+01
+   2.0000E+01
+   2.5000E+01
+   3.0000E+01
+   3.5000E+01
+   4.0000E+01
+   4.5000E+01
+   5.0000E+01
+
+
+  Constant velocities have been specified
+
+   X Darcy velocity =   0.20000000000000001     
+   Y Darcy velocity =    0.0000000000000000     
+
+
+
+
+   Using constant diffusion coefficient
+  Diffusion coefficient (m**2/yr) =       2.8982E-02
+
+
+  Longitudinal dispersivity (m) =     1.0000E-02
+  Transverse dispersivity (m) =       1.0000E-02
+
+
+         INITIALIZATION COMPLETED 
+          STARTING TIMESTEPPING 
+

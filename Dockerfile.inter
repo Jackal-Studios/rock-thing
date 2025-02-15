@@ -1,0 +1,6 @@
+FROM intersystemsdc/iris-community:latest
+
+
+EXPOSE 1972
+EXPOSE 52773
+

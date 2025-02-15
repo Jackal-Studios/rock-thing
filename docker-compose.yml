@@ -1,9 +1,36 @@
 version: '3.8'
 
 services:
+  flask-app:
+    build:
+      context: .  # Use the current directory for the build
+      dockerfile: Dockerfile.python  # Explicitly specify the Dockerfile name (optional if it's named "Dockerfile")
+    depends_on:
+      - gcc-service
+    container_name: flask-app
+    networks:
+      - my_network
+    volumes:
+      - ./python:/app/
+      - ./crunchflow/input:/home/crunch_user/files  # Bind mount your code to the container (optional)
+      - /var/run/docker.sock:/var/run/docker.sock  # Allow access to Docker CLI
+    environment:
+      - FLASK_APP=/app/app.py  # The name of your Flask app
+      - FLASK_ENV=development  # Optional, use 'production' in production
+      - PYTHONUNBUFFERED=1 
+      - DOCKER_HOST=unix:///var/run/docker.sock  # Specify Docker host
+    ports:
+      - "5000:5000"  # Expose port 5000 for the Flask app
+    user: root 
+
+    group_add:
+      - "997"  # docker group ID (may need to adjust this based on your host system)
+
   gcc-service:
     container_name: topcrunch-custom
     # restart: unless-stopped
+    networks:
+      - my_network
 
     build:
       context: .  # Use the current directory for the build
@@ -13,16 +40,27 @@ services:
       - "8080:8080"  # Map port if needed
     volumes:
       - ./crunchflow/input:/home/crunch_user/files  # Bind mount your code to the container (optional)
+    working_dir: /home/crunch_user  # Add this to match Dockerfile
+
+networks:
+  my_network:
+    driver: bridge
     # environment:
     #   - ENV_VAR=example_value  # Pass any environment variables if needed
-  flask-app:
-    build: .
-    container_name: flask-app
-    volumes:
-      - ./python:/app/
-    environment:
-      - FLASK_APP=/app/app.py  # The name of your Flask app
-      - FLASK_ENV=development  # Optional, use 'production' in production
-      - PYTHONUNBUFFERED=1 
-    ports:
-      - "5000:5000"  # Expose port 5000 for the Flask app
+  # intersystems-service:
+  #   container_name: iris-comm
+
+  #   build:
+  #     context: .  # Use the current directory for the build
+  #     dockerfile: Dockerfile.inter  # Explicitly specify the Dockerfile name (optional if it's named "Dockerfile")
+  #   command: tail -f /dev/null  # Prevent the container from exiting immediately
+  #   ports:
+  #     - "1972:1972" 
+  #     - "52773:52773"
+  #   environment:
+  #     IRIS_PASSWORD: demo
+  #     IRIS_USERNAME: demo
+  #   volumes:
+  #     - ./db:/home/db # Bind mount your code to the container (optional)
+  #   # environment:
+    
