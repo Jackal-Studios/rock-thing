@@ -53,7 +53,6 @@ def generate_unique_filename():
 def create_input_file(input_data, filename):
     print("input file creating...")
     
-
 def parse_output(filename):
     print("getting output")
 

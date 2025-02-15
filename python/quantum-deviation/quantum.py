@@ -3,7 +3,7 @@ import json
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 
-def getData(n, left, mode, right):
+def getRandomSample(n, left, mode, right):
 
     data = np.random.triangular(left, mode, right, 10000)
 
@@ -54,7 +54,7 @@ values = soilgrids_data["properties"]["cec"]["depths"][0]["values"]
 
 left, mode, right = values["Q0.05"], values["Q0.5"], values["Q0.95"]
 
-soil_samples = getData(n, left, mode, right)
+soil_samples = getRandomSample(n, left, mode, right)
 
 #weather
 with open('weather.json', 'r') as file:
@@ -67,14 +67,14 @@ precipitation_stats = result['precipitation']
 
 left, mode, right = precipitation_stats["min"], precipitation_stats["mean"], precipitation_stats["max"]
 
-precip_samples = getData(n, left, mode, right)
+precip_samples = getRandomSample(n, left, mode, right)
 
 #temperature
 temp_stats = result['temp']
 
 left, mode, right = temp_stats["record_min"], temp_stats["mean"], temp_stats["record_max"]
 
-temp_samples = getData(n, left, mode, right)
+temp_samples = getRandomSample(n, left, mode, right)
 
 for temp in range(len(temp_samples)):
     if temp_samples[temp] < 25:
