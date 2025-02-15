@@ -114,6 +114,10 @@ document.getElementById('run-button').addEventListener('click', function() {
     modalMessage.innerText = message;
     const modal = document.getElementById('modal');
     modal.style.display = 'block';
+
+    if (centerPoint) {
+        sendCoordinates(centerPoint[1], centerPoint[0]); // Note: latitude comes first
+    }
 });
 
 map.getCanvas().style.cursor = 'crosshair';
