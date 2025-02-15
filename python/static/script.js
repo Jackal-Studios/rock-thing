@@ -17,6 +17,18 @@ for (const input of inputs) {
     };
 }
 
+window.addEventListener('load', () => {
+    const searchBox = new MapboxSearchBox();
+    searchBox.accessToken = mapboxgl.accessToken;
+    searchBox.options = {
+        types: 'address,poi',
+        proximity: [-73.99209, 40.68933]
+    };
+    searchBox.marker = true;
+    searchBox.mapboxgl = mapboxgl;
+    map.addControl(searchBox);
+});
+
 let centerPoint = null;
 let radiusCircle = null;
 let isDragging = false;

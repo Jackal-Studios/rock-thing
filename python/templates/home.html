@@ -11,12 +11,20 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">
+    <script id="search-js" defer="" src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
 </head>
 <body>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
     <div id="map"></div>
 
     <div class="sidebar">
-        <button id="run-button">Run</button>
+        <!-- Search bar container -->
+        <div id="search-box"></div>
+
+        <!-- Toggle map style -->
         <div id="menu">
             <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked">
             <label for="satellite-streets-v12">satellite streets</label>
@@ -24,6 +32,7 @@
             <label for="outdoors-v12">outdoors</label>
         </div>
 
+        <!-- Dropdown for rock types -->
         <div class="dropdown-box">
             <label for="dropdown1">Rock Types:</label>
             <select id="dropdown1">
@@ -38,23 +47,18 @@
                 <option value="apatite">Apatite</option>
             </select>
         </div>
+
+        <!-- Custom input -->
         <div class="input-box">
             <label for="input-text">Custom Input:</label>
             <input type="text" id="input-text">
         </div>
 
-        <!-- <div id="modal" class="modal">
-            <div class="modal-content">
-                <p id="modal-message"></p>
-            </div>
-        </div> -->
+        <!-- Run button -->
+        <button id="run-button">Run</button>
     </div>
 
-    <!-- <div class="calculation-box">
-        <p>Click to drop a point and expand the circle.</p>
-        <div id="circle-info"></div>
-    </div> -->
-
+    <!-- Modal for rock information -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <p id="modal-message"></p>

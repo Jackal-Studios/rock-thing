@@ -35,6 +35,15 @@ body {
     border-radius: 5px;
 }
 
+/* Mapbox search box customization */
+#search-box {
+    margin-bottom: 20px;
+}
+
+#menu {
+    margin-bottom: 20px;
+}
+
 #run-button {
     padding: 10px 20px;
     background-color: #007cbf;
