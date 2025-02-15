@@ -1,3 +1,5 @@
+
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0Y3Jhd2ZvcmQiLCJhIjoiY203NXJ0ZTR6MDB3MzJucHo2ZmppNmR1YSJ9.KKea34jSVKuLRBfYQhSfJw';
 
 const map = new mapboxgl.Map({
@@ -107,6 +109,7 @@ function updateCircle(e) {
     info.innerHTML = `<p><strong>Radius:</strong> ${distance.toFixed(2)} km</p><p><strong>Center:</strong> [${centerPoint[0].toFixed(6)}, ${centerPoint[1].toFixed(6)}]</p>`;
 }
 
+
 document.getElementById('run-button').addEventListener('click', function() {
     const selectedRock = document.getElementById('dropdown1').value;
     const message = rockInfo[selectedRock];
@@ -116,7 +119,7 @@ document.getElementById('run-button').addEventListener('click', function() {
     modal.style.display = 'block';
 
     if (centerPoint) {
-        sendCoordinates(centerPoint[1], centerPoint[0]); // Note: latitude comes first
+        apicalls.sendCoordinates(centerPoint[1], centerPoint[0]); // Note: latitude comes first
     }
 });
 
