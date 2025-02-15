@@ -3,8 +3,8 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0Y3Jhd2ZvcmQiLCJhIjoiY203NXJ0ZTR6MDB3MzJuc
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [-91.874, 42.76],
-    zoom: 0
+    center: [-100, 42.76],
+    zoom: 3
 });
 
 const layerList = document.getElementById('menu');
@@ -54,6 +54,7 @@ map.on('click', (e) => {
     if (isDragging) {
         isDragging = false;
         map.off('mousemove', updateCircle);
+        map.getCanvas().style.cursor = 'crosshair';
         return;
     }
 
@@ -79,6 +80,7 @@ map.on('click', (e) => {
 
     map.on('mousemove', updateCircle);
     isDragging = true;
+    map.getCanvas().style.cursor = 'ew-resize';
 });
 
 function updateCircle(e) {
@@ -102,3 +104,5 @@ document.getElementById('run-button').addEventListener('click', function() {
     const modal = document.getElementById('modal');
     modal.style.display = 'block';
 });
+
+map.getCanvas().style.cursor = 'crosshair';
