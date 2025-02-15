@@ -1,2 +1,5 @@
 Flask==2.0.3
-Werkzeug==2.0.3
+werkzeug==2.0.3 
+qiskit==1.2.4 
+qiskit-aer==0.15.1 
+numpy==1.26.4
