@@ -1,11 +1,25 @@
 version: '3.8'
 
 services:
+  gcc-service:
+    container_name: topcrunch-custom
+    # restart: unless-stopped
+
+    build:
+      context: .  # Use the current directory for the build
+      dockerfile: Dockerfile  # Explicitly specify the Dockerfile name (optional if it's named "Dockerfile")
+    command: tail -f /dev/null  # Prevent the container from exiting immediately
+    ports:
+      - "8080:8080"  # Map port if needed
+    volumes:
+      - ./crunchflow/input:/home/crunch_user/files  # Bind mount your code to the container (optional)
+    # environment:
+    #   - ENV_VAR=example_value  # Pass any environment variables if needed
   flask-app:
     build: .
     container_name: flask-app
     environment:
-      - FLASK_APP=app.py  # The name of your Flask app
+      - FLASK_APP=/app/app.py  # The name of your Flask app
       - FLASK_ENV=development  # Optional, use 'production' in production
     ports:
       - "5000:5000"  # Expose port 5000 for the Flask app
