@@ -1,4 +1,5 @@
 from flask import render_template, Blueprint
+from .crunchflow import hello
 
 main_routes = Blueprint('main', __name__)
 
@@ -9,8 +10,12 @@ main_routes = Blueprint('main', __name__)
 #                 return line.split('=')[1].strip()
 #     return None
 
+
+
+
 @main_routes.route('/')
 def home():
+    hello()
     return render_template('home.html')
     
 

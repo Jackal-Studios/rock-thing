@@ -1,3 +1,12 @@
+
+TODO:
+API KEY SECURITY
+
+other stuff
+
+
+
+HOW TO RUN THIS SHIT:
 insttuctions:
 
 to build and run
@@ -20,5 +29,4 @@ CrunchTope inputfile.in
 should output simulation
 
 also flask app should be running
-
 

@@ -23,5 +23,6 @@ services:
     environment:
       - FLASK_APP=/app/app.py  # The name of your Flask app
       - FLASK_ENV=development  # Optional, use 'production' in production
+      - PYTHONUNBUFFERED=1 
     ports:
       - "5000:5000"  # Expose port 5000 for the Flask app
