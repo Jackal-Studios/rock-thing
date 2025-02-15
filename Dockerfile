@@ -75,13 +75,14 @@ RUN pip3 install --no-cache-dir --break-system-packages \
 COPY ./python/. /app
 RUN pip3 install --no-cache-dir --break-system-packages \ 
     Flask==2.0.3 \
-    werkzeug==2.0.3
-
+    werkzeug==2.0.3 \
+    qiskit==1.2.4 \
+    qiskit-aer==0.15.1 \
+    numpy==1.26.4
 
 # Expose port 5000 (the default Flask port)
 EXPOSE 5000
 CMD ["flask", "run", "--host=0.0.0.0"]
-
 
 # Final working directory
 WORKDIR /home/crunch_user

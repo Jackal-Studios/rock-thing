@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,26 +19,31 @@
     <div class="dropdown-box">
         <label for="dropdown1">Rock Types:</label>
         <select id="dropdown1">
-            <option value="option1">Rock 1</option>
-            <option value="option2">Rock 2</option>
-            <option value="option3">Rock 3</option>
+            <option value="basalt">Basalt</option>
+            <option value="olivine">Olivine</option>
+            <option value="serpentinite">Serpentinite</option>
+            <option value="wollastonite">Wollastonite</option>
+            <option value="glauconite">Glauconite</option>
+            <option value="kimberlite">Kimberlite</option>
+            <option value="brucite">Brucite</option>
+            <option value="feldspar">Feldspar</option>
+            <option value="apatite">Apatite</option>
         </select>
         <a href="{{ url_for('main.home') }}">Home</a>
 
-        <label for="dropdown2">Soil Depth Range (cm):</label>
-        <select id="dropdown2">
-            <option value="optionA">0-5</option>
-            <option value="optionB">5-15</option>
-            <option value="optionC">15-30</option>
-            <option value="optionD">30-60</option>
-            <option value="optionE">60-100</option>
-            <option value="optionF">100-200</option>
-        </select>
     </div>
 
     <div class="calculation-box">
         <p>Click to drop a point and expand the circle.</p>
         <div id="circle-info"></div>
+    </div>
+
+    <button id="run-button">Run</button>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <p id="modal-message"></p>
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
