@@ -38,6 +38,10 @@ def create_user_folder(foldername):
 def delete_user_folder(foldername):
     return run_command(f'bash -c "cd /home/crunch_user/files && rm -rf {foldername} && ls /home/crunch_user/files"')
 
+def ls_user_folder(foldername):
+    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && ls"')
+
+
 
 
 def randomword(length):
@@ -50,20 +54,39 @@ def current_milli_time():
 def generate_unique_filename():
     return str(current_milli_time()) + randomword(10)
 
-def create_input_file(input_data, filename):
-    print("input file creating...")
-    
-def parse_output(filename):
-    print("getting output")
+def create_input_file(input_data, foldername):
+    #TODO implement this
+    print("make the input file")
+    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && cp ../aEWbinary.in . && ls"')
 
-    #parse output data
+
+    
+
+# docker exec topcrunch-custom bash -c "cd /home/crunch_user/files && CrunchTope aEWbinary.in"
+def run_simulation(foldername, inputfilename):
+    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && CrunchTope {inputfilename} && ls"')
+
+
+def create_input_folder(input_data, foldername):
+    print(f"input folder '{foldername}' creating...")
+    create_user_folder(foldername)
+    return create_input_file(input_data, foldername)
+
+
+
+def parse_output(foldername):
+    print(f"getting output from: {foldername}")
+    print(ls_user_folder(foldername))
+
+    # TODO: parse output data
 
     # clean up
-    os.remove(filename)
-    return {}
+    return delete_user_folder(foldername)
+    
 
 def get_output(input_data):
-    filename = generate_unique_filename()
-    create_input_file(input_data, filename)
-    print("input file created")
-    return parse_output(filename)    # run crunchtop
+    foldername = generate_unique_filename()
+    create_input_folder(input_data, foldername)
+    run_simulation(foldername, "aEWbinary.in")  #TODO change this ?
+    # print("input folder created")
+    return parse_output(foldername)    # run crunchtop

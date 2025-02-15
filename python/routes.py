@@ -64,8 +64,14 @@ def run_script2():
 def run_script3():
     return crunchflow.delete_user_folder("1HELLLO")
     # return crunchflow.run_command('bash -c "cd /home/crunch_user && ls"')
-
-
+@main_routes.route('/runcrfol')
+def run_script4():
+    return crunchflow.create_input_folder(1, crunchflow.generate_unique_filename())
+    
+@main_routes.route('/runparseout')
+def run_script5():
+    return crunchflow.get_output(1)
+    
 
 @main_routes.route('/')
 def home():

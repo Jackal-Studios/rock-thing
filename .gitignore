@@ -5,6 +5,7 @@
 
 #custom
 crunchflow/input/**/*.out
+crunchflow/input/*.out
 
 # User-specific files
 *.rsuser
