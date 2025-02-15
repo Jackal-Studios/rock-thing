@@ -4,20 +4,17 @@
     <meta charset="utf-8">
     <title>Rock Map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <!-- Mapbox and TurfJS -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
-    <link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">
-    <script id="search-js" defer="" src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
 </head>
 <body>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-
     <div id="map"></div>
 
     <div class="sidebar">
@@ -50,7 +47,7 @@
 
         <!-- Custom input -->
         <div class="input-box">
-            <label for="input-text">Custom Input:</label>
+            <label for="input-text">Desired Area (m^2):</label>
             <input type="text" id="input-text">
         </div>
 

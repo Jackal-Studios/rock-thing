@@ -6,12 +6,13 @@ body {
 
 #map {
     width: 75%;
-    height: 100vh;  /* Full viewport height */
+    height: 100vh;
+    cursor: crosshair;
 }
 
 .sidebar {
     width: 25%;
-    height: 100vh;  /* Full viewport height */
+    height: 100vh;
     background-color: #f8f8f8;
     padding: 20px;
     box-sizing: border-box;
@@ -35,7 +36,6 @@ body {
     border-radius: 5px;
 }
 
-/* Mapbox search box customization */
 #search-box {
     margin-bottom: 20px;
 }
