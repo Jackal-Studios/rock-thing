@@ -27,11 +27,13 @@ window.addEventListener('load', () => {
     searchBox.marker = true;
     searchBox.mapboxgl = mapboxgl;
     map.addControl(searchBox);
+    map.addControl(new mapboxgl.NavigationControl()); // idk about that lowk
 });
 
 let centerPoint = null;
 let radiusCircle = null;
 let isDragging = false;
+let select_clicks = 0;
 
 const rockInfo = {
     basalt: "Basalt: A volcanic rock widely used in ERW due to its availability and effectiveness in capturing carbon dioxide. It can sequester up to 2 tons of CO2 per hectare per year.",
@@ -51,10 +53,20 @@ function createRadiusCircle(radius) {
 }
 
 map.on('click', (e) => {
-    if (isDragging) {
-        isDragging = false;
-        map.off('mousemove', updateCircle);
+    if(select_clicks == 2){
+        select_clicks = 0;
+        if (map.getLayer('circle')) {
+            map.removeLayer('circle');
+            map.removeSource('circle');
+        }
         map.getCanvas().style.cursor = 'crosshair';
+        return;
+    }
+
+    if (select_clicks == 1) {
+        select_clicks = 2;
+        map.off('mousemove', updateCircle);
+        map.getCanvas().style.cursor = 'pointer';
         return;
     }
 
@@ -77,14 +89,13 @@ map.on('click', (e) => {
             }
         });
     }
-
+    select_clicks = 1;
     map.on('mousemove', updateCircle);
-    isDragging = true;
     map.getCanvas().style.cursor = 'ew-resize';
 });
 
 function updateCircle(e) {
-    if (!isDragging) return;
+    if (select_clicks != 1) return;
     const newPoint = turf.point([e.lngLat.lng, e.lngLat.lat]);
     const from = turf.point(centerPoint);
     const distance = turf.distance(from, newPoint, { units: 'kilometers' });
