@@ -50,7 +50,7 @@ def getRandomSample(n, left, mode, right, quantum):
         return getQuantumSample(n, left, mode, right)
     return getClassicalSample(n, left, mode, right)
 
-def runAll(soiljson, weatherjson, n, quantum):
+def runAll(soiljson, weatherjson, n, quantum, feedstock, spread, years):
     
     samples = {}
 
