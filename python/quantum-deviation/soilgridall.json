@@ -1,0 +1,354 @@
+{
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -122,
+        37
+      ]
+    },
+    "properties": {
+      "layers": [
+        {
+          "name": "bdod",
+          "unit_measure": {
+            "d_factor": 100,
+            "mapped_units": "cg/cm³",
+            "target_units": "kg/dm³",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 100,
+                "Q0.5": 140,
+                "Q0.95": 177,
+                "mean": 138,
+                "uncertainty": 6
+              }
+            }
+          ]
+        },
+        {
+          "name": "cec",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "mmol(c)/kg",
+            "target_units": "cmol(c)/kg",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 35,
+                "Q0.5": 143,
+                "Q0.95": 382,
+                "mean": 168,
+                "uncertainty": 24
+              }
+            }
+          ]
+        },
+        {
+          "name": "cfvo",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "cm³/dm³",
+            "target_units": "cm³/100cm³",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 0,
+                "Q0.5": 30,
+                "Q0.95": 461,
+                "mean": 113,
+                "uncertainty": 154
+              }
+            }
+          ]
+        },
+        {
+          "name": "clay",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "g/kg",
+            "target_units": "%",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 14,
+                "Q0.5": 183,
+                "Q0.95": 686,
+                "mean": 261,
+                "uncertainty": 37
+              }
+            }
+          ]
+        },
+        {
+          "name": "nitrogen",
+          "unit_measure": {
+            "d_factor": 100,
+            "mapped_units": "cg/kg",
+            "target_units": "g/kg",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 30,
+                "Q0.5": 110,
+                "Q0.95": 327,
+                "mean": 132,
+                "uncertainty": 27
+              }
+            }
+          ]
+        },
+        {
+          "name": "ocd",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "dg/dm³",
+            "target_units": "hg/m³",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 74,
+                "Q0.5": 181,
+                "Q0.95": 411,
+                "mean": 225,
+                "uncertainty": 19
+              }
+            }
+          ]
+        },
+        {
+          "name": "phh2o",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "pH*10",
+            "target_units": "-",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 49,
+                "Q0.5": 57,
+                "Q0.95": 79,
+                "mean": 59,
+                "uncertainty": 5
+              }
+            }
+          ]
+        },
+        {
+          "name": "sand",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "g/kg",
+            "target_units": "%",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 99,
+                "Q0.5": 420,
+                "Q0.95": 817,
+                "mean": 445,
+                "uncertainty": 17
+              }
+            }
+          ]
+        },
+        {
+          "name": "silt",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "g/kg",
+            "target_units": "%",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 17,
+                "Q0.5": 245,
+                "Q0.95": 708,
+                "mean": 294,
+                "uncertainty": 28
+              }
+            }
+          ]
+        },
+        {
+          "name": "soc",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "dg/kg",
+            "target_units": "g/kg",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 37,
+                "Q0.5": 111,
+                "Q0.95": 420,
+                "mean": 159,
+                "uncertainty": 35
+              }
+            }
+          ]
+        },
+        {
+          "name": "wv0010",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "(10-2 cm³/cm³)*10",
+            "target_units": "10-2 cm³/cm³",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 135,
+                "Q0.5": 352,
+                "Q0.95": 452,
+                "mean": 341,
+                "uncertainty": 9
+              }
+            }
+          ]
+        },
+        {
+          "name": "wv0033",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "(10-2 cm³/cm³)*10",
+            "target_units": "10-2 cm³/cm³",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 97,
+                "Q0.5": 303,
+                "Q0.95": 522,
+                "mean": 333,
+                "uncertainty": 14
+              }
+            }
+          ]
+        },
+        {
+          "name": "wv1500",
+          "unit_measure": {
+            "d_factor": 10,
+            "mapped_units": "(10-2 cm³/cm³)*10",
+            "target_units": "10-2 cm³/cm³",
+            "uncertainty_unit": ""
+          },
+          "depths": [
+            {
+              "range": {
+                "top_depth": 15,
+                "bottom_depth": 30,
+                "unit_depth": "cm"
+              },
+              "label": "15-30cm",
+              "values": {
+                "Q0.05": 64,
+                "Q0.5": 124,
+                "Q0.95": 286,
+                "mean": 154,
+                "uncertainty": 18
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "query_time_s": 3.1938095092773438
+}
+  

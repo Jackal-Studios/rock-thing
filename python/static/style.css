@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    font-family: 'Roboto Slab', serif;
 }
 
 #map {
@@ -12,9 +13,8 @@ body {
 
 #search-and-menu {
     position: absolute;
-    top: 5 px;
+    top: 5px;
     left: 10px;
-    
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -29,7 +29,7 @@ body {
     background: white;
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 2;
     left: 10px;
@@ -74,31 +74,95 @@ body {
     background-color: #005f8f;
 }
 
-.modal {
-    display: none; 
-    position: fixed; 
+/* Modal Overlay */
+.modal-overlay {
+    display: none;
+    position: fixed;
     z-index: 999;
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%; 
-    background-color: rgba(0,0,0,0.5); 
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Box */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
 }
 
 .modal-content {
     background-color: white;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 300px;
-    text-align: center;
+    width: 600px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
-.modal p {
+/* Aligns text and image in the modal */
+.modal-content-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Text Container */
+.text-container {
+    flex: 2;
+    margin-right: 20px;
+}
+
+.modal-message {
     font-size: 18px;
+    margin: 20px 0;
+    font-family: 'Open Sans';
 }
 
+/* Image Container */
+.image-container {
+    text-align: center;
+    flex: 1;
+}
+
+.image-container img {
+    width: 150px;
+    height: auto;
+}
+
+/* Progress Bar */
+.wrapper {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar-fill {
+    display: block;
+    height: 22px;
+    background-color: #659cef;
+    border-radius: 3px;
+    width: 0%;
+    transition: width 500ms ease-in-out;
+}
+
+/* General Paragraph Styles */
 p {
     font-family: 'Open Sans';
     margin: 0;
