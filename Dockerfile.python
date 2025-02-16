@@ -69,10 +69,10 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     werkzeug==2.0.3 \
     qiskit==1.2.4 \
     qiskit-aer==0.15.1 \
-    numpy==1.26.4 \
-    crunchflow=2.0.4 \
-    pydgsa=1.0.5 \
-    pyemu=1.3.5
+    numpy==2.0.0 \
+    crunchflow==2.0.4 \
+    pydgsa==1.0.5 \
+    pyemu==1.3.5
     
 # Copy application code
 COPY ./python/. .

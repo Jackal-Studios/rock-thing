@@ -18,6 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #search-box {
@@ -41,6 +42,7 @@ body {
     background-color: #f8f8f8;
     padding: 20px;
     box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-box, .input-box {
@@ -59,19 +61,34 @@ body {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #run-button {
     padding: 10px 20px;
-    background-color: #007cbf;
+    background-color: #588157;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* margin-left: 40%; */
+    margin-bottom: 20px;
 }
 
 #run-button:hover {
-    background-color: #005f8f;
+    background-color: #A3B18A;
+}
+
+.dropdown-box select, .input-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #94A3B8;
+    border-radius: 5px;
+    background-color: #F4F4F9; /* Light input background */
+    font-family: 'Roboto Slab', serif; /* Ensuring the font family is applied */
+    color: #1E293B; /* Dark text color for better readability against light background */
 }
 
 /* Modal Overlay */
@@ -107,6 +124,7 @@ body {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Aligns text and image in the modal */
@@ -134,11 +152,6 @@ body {
     flex: 1;
 }
 
-.image-container img {
-    width: 150px;
-    height: auto;
-}
-
 /* Progress Bar */
 .wrapper {
     width: 100%;
@@ -160,6 +173,33 @@ body {
     border-radius: 3px;
     width: 0%;
     transition: width 500ms ease-in-out;
+}
+
+.metrics {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    margin-top: -10px;  /* Adjust this value based on the height of the metrics */
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    outline: none;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px; 
+    background: #588157;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 /* General Paragraph Styles */

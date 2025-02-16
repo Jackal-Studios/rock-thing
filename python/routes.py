@@ -2,7 +2,6 @@ from flask import render_template, Blueprint
 from flask import request, jsonify
 import subprocess
 import crunchflow
-import docker
 
 main_routes = Blueprint('main', __name__)
 
