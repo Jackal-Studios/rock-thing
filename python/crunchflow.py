@@ -82,28 +82,38 @@ def generate_unique_filename():
     return str(current_milli_time()) + randomword(10)
 
 def create_input_file(input_data, foldername):
+    # create here : f'/home/crunch_user/files/{foldername}'
+    # pass input_data to kats math stuff and get dictionary
+    # create file#1 from dicitionary
+    # run 
+
     #TODO implement this
-    print("make the input file")
-    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && cp ../aEWbinary.in . && ls"')
+    # print("make the input file")
+    # return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && cp ../aEWbinary.in . && ls"')
+    return 0
 
 
     
 
 # docker exec topcrunch-custom bash -c "cd /home/crunch_user/files && CrunchTope aEWbinary.in"
-def run_simulation(foldername, inputfilename):
+def run_simulation(input_data, foldername, inputfilename):
+    #run inputfile through kats math -> get dictionary
+    # loop over dictionary changing inputfiles and end up with 10 time files
+    # create_input_file()
     return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && CrunchTope {inputfilename} && ls"')
 
 
-def create_input_folder(input_data, foldername):
+def create_input_folder(foldername):
     print(f"input folder '{foldername}' creating...")
     create_user_folder(foldername)
-    return create_input_file(input_data, foldername)
+    # return create_input_file(input_data, foldername)
 
 
 
 def parse_output(foldername):
     print(f"getting output from: {foldername}")
     print(ls_user_folder(foldername))
+    # loop through and calculate data
     data = read_and_package(f'/home/crunch_user/files/{foldername}/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
     print(data)
 
@@ -114,7 +124,8 @@ def parse_output(foldername):
 
 def get_output(input_data):
     foldername = generate_unique_filename()
-    create_input_folder(input_data, foldername)
-    run_simulation(foldername, "aEWbinary.in")  #TODO change this ?
+    create_input_folder(foldername)
+    # loop over
+    run_simulation(input_data, foldername, "aEWbinary.in")  #TODO change this ?
     # print("input folder created")
     return parse_output(foldername)    # run crunchtop
