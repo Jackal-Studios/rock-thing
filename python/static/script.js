@@ -421,6 +421,7 @@ function loadingScreen() {
     document.head.appendChild(style);
 }
 
+
 // Trigger the loading screen when needed
 document.getElementById('run-button').addEventListener('click', function() {
     // loadingScreen();
@@ -430,21 +431,43 @@ document.getElementById('run-button').addEventListener('click', function() {
         longitude: centerPoint[0],
         mode: document.querySelector('input[name="mode-toggle"]:checked').value === "advanced",
         random_sampler: document.querySelector('input[name="quantum-toggle"]:checked').value === "quantum",
-        desired_area: document.getElementById("area-text").value,
-        feedstock_surface_density: document.getElementById("feedstock-text").value,
+        desired_area: document.getElementById("area-text").value,                       // make sure this is set
+        feedstock_surface_density: document.getElementById("feedstock-text").value,     // make sure this is set
         time_series_years: parseInt(document.getElementById("customSlider").value, 10),
         rock_type: document.getElementById("dropdown1").value,
-        number_of_occurrences: document.getElementById("advanced-mode").checked ? document.getElementById("occurrences-text").value : null
+        number_of_occurrences: document.getElementById("advanced-mode").checked ? document.getElementById("occurrences-text").value : 10
     };
     
+    // TODO check feedstock & desired area is set, else display error message asking them to be set
+    if (!inputs.feedstock_surface_density || !inputs.desired_area) {
+       
+        alert("must set the missing stuff");
+        return false;
+    }
+    
+
+   
+
+
     if (centerPoint) {
-        apicalls.sendCoordinates(inputs).then(serverResponse => {
-            // serverResponse will be just the final server response
-            data = serverResponse;
+        // apicalls.sendCoordinates(inputs).then(serverResponse => {
+        //     // serverResponse will be just the final server response
+        //     data = serverResponse;
+        //     console.log("aaa");
+        //     console.log(serverResponse);
+        //     showPopup();
+        // });
+
+        sendCoordinates(inputs)
+        .then(result => {
+            console.log(result);
+            data = result;
             console.log("aaa");
-            console.log(serverResponse);
             showPopup();
-        });
+        }
+        
+        )
+        .catch(error => console.error(error));
 
     }
 

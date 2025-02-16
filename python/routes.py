@@ -71,6 +71,10 @@ def run_script4():
 def run_script5():
     return crunchflow.get_output(1)      
     
+@main_routes.route('/ls')
+def run_script6():
+    return crunchflow.ls_user_folder("")      
+    
 
 @main_routes.route('/')
 def home():
@@ -84,8 +88,21 @@ def save_soil_data():
     # print(data)
     # sent the output to the parse output and return
 
-    resp = crunchflow.get_output(data)
-    
+    # resp = crunchflow.get_output(data)
+    resp = crunchflow.handle_json_request(data)
+
+    return resp
+
+@main_routes.route('/save_data', methods=['POST'])
+def save_data():
+    data = request.json
+    # print(data)
+    # sent the output to the parse output and return
+
+    # resp = crunchflow.get_output(data)
+    # resp = crunchflow.handle_json_request(data)
+    resp = crunchflow.handle_json_request(data)
+
     return resp
     
 
