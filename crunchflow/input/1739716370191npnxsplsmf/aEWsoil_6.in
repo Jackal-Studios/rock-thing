@@ -1,0 +1,210 @@
+TITLE
+EW simulation with feedstock-soil and soil: Larnite as feedstock and 3 soil minerals
+END
+ 
+RUNTIME
+time_units        years
+timestep_max      0.5
+timestep_init     1.0E-14
+time_tolerance    0.005
+correction_max    2.0
+debye-huckel      true
+speciate_only     false
+database_sweep    false
+database          datacom_DEIbasalt_15April2014_allkinetics.dbs
+aqueousdatabase  aqueous.dbs
+fix_saturation    0.50
+gimrt             true
+screen_output          50
+END
+ 
+POROSITY
+!read_porosityfile   porositysc.dat
+porosity_update true
+END
+ 
+OUTPUT
+time_units        years
+spatial_profile  1 5 10 15 20 25 30 35 40 45 50
+time_series    timeEWm6.out 200
+time_series_print    pH H+ CO2(aq) Mg++ Ca++ 
+END
+ 
+MINERALS
+!Feedstock (simplified) just assume one simple mineral
+Wollastonite -label default  -rate  -13.00 !DissolutionOnly
+
+!Native Soil Mineralogy (simplified)
+Kaolinite            -label default  -rate  -16.00  !DissolutionOnly (clay)
+K-Feldspar           -label default  -rate  -15.41  !DisssolutionOnly (silt)
+Quartz               -label default  -rate  -50.00  !Non-reactive (sand)
+
+!Soil Respiration
+CO2_pump    -label default  -rate  -15.00 
+END
+ 
+AQUEOUS_KINETICS
+END
+ 
+GASES
+CO2(g)
+END
+ 
+TEMPERATURE
+set_temperature 25
+END
+ 
+DISCRETIZATION
+xzones 300 0.01 1
+END
+ 
+BOUNDARY_CONDITIONS
+X_begin   SoluteWater    dirichlet
+X_end     NativeSoil     flux
+END
+ 
+INITIAL_CONDITIONS
+Feedstock 1-25 1 1
+NativeSoil 26-300 1 1
+END
+ 
+TRANSPORT
+distance_units       centimeters
+time_units           seconds
+fix_diffusion        0.919E-05
+formation_factor      1.0
+cementation_exponent  1.0
+dispersivity          1
+gas_diffusion        1.E-01
+END
+ 
+ 
+FLOW
+time_units      years
+distance_units  meters
+constant_flow   0.2
+!constant_gasflow 200000
+END
+ 
+ION_EXCHANGE
+exchange   XKaol- on Kaolinite
+convention Gaines-Thomas
+!update this from soilgrids.org
+15.7 cmol/kg
+END
+
+SURFACE_COMPLEXATION
+!>AlOH_str on Kaolinite 
+END
+ 
+PRIMARY_SPECIES
+H+
+CO2(aq)
+Mg++
+Ca++
+K+
+SiO2(aq)
+Na+
+Al+++
+Cl-
+NO3-
+Tracer
+END
+ 
+Condition SoluteWater !ET-corrected precipitation
+temperature      25
+set_porosity     0.999999
+pH              5.13
+CO2(aq)         CO2(g)  450E-6
+O2(aq)          O2(g)  0.2
+Na+                                4.00E-04
+Mg++                               6.00E-05
+K+                                 1.00E-05
+Ca++                               9.00E-05
+Al+++                              2.00E-07
+SiO2(aq)                           1.00E-07
+Cl-                                5.1717E-04
+NO3-                               1.00E-04
+Tracer                             1E-4 
+XKaol-                 -cec           1.17E-04 
+END
+
+Condition Feedstock  !Same water as above
+temperature      25
+pH              5.0
+CO2(aq)         CO2(g)  450E-6
+O2(aq)          O2(g)  0.2
+Na+                                4.00E-04
+Mg++                               6.00E-05
+K+                                 1.00E-05
+Ca++                               9.00E-05
+Al+++                              2.00E-07
+SiO2(aq)                           1.00E-07
+Cl-                                5.2008E-04
+NO3-                               1.00E-04
+Tracer                             1E-8
+Wollastonite                       0.000554324 ssa  0.5
+CO2_pump                           0.000993261 ssa 0.0004
+Kaolinite                          0.380122960 ssa 0.1
+K-Feldspar                         0.289986106 ssa 0.1
+Quartz                             0.135000000 ssa 0.1
+XKaol-  -cec          3.17E-04
+END
+
+ 
+
+Condition NativeSoil  !Same water as above.
+temperature      25
+pH              5.0
+CO2(aq)         CO2(g)  3000E-6
+O2(aq)          O2(g)  0.2
+Na+                                4.00E-04
+Mg++                               6.00E-05
+K+                                 1.00E-05
+Ca++                               9.00E-05
+Al+++                              2.00E-07
+SiO2(aq)                           1.00E-07
+Cl-                                5.1716E-04
+NO3-                               1.00E-04
+NH3(aq)                            1.00E-04
+SO4--                              1.00E-04
+Fe++                               1E-8
+Ti(OH)4(aq)                        1E-8
+Tracer                             1E-8
+Wollastonite                       0.00 ssa  3
+Kaolinite                          0.402430645 ssa 1
+K-Feldspar                         0.307004070 ssa 0.1
+Quartz                             0.143431416 ssa 0.1
+XKaol-  -cec           1.17E-04
+SolidDensity           2650
+>AlOH_str              5E-8             20 
+END
+
+!This list should be updated in future
+SECONDARY_SPECIES
+
+Al(OH)2+
+AlO2-
+AlOH++
+CaCl+
+CaCl2(aq)
+HCO3-
+H2SiO4--
+HAlO2(aq)
+HCl(aq)
+HSiO3-
+KCl(aq)
+MgCl+
+NaAlO2(aq)
+NaCl(aq)
+NaHSiO3(aq)
+NaOH(aq)
+OH-
+CO3--
+CaCO3(aq)
+CaHCO3+
+MgCO3(aq)
+MgHCO3+
+NaCO3-
+NaHCO3(aq)
+END

@@ -85,10 +85,11 @@ def generate_unique_filename():
     return str(current_milli_time()) + randomword(10)
 
 def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, cec, 
-                          feedspread, bulkdense, file_num, foldername):
+                          feedspread, bulkdense, file_num, foldername, sandpercent):
 
     claydense = 2.65
     siltdense = 2.60
+    sanddense = 2.65
     # rates and density for feedstocks
     mineral_rates = {
         "Basalt": (-13.00, 3.01),
@@ -124,59 +125,125 @@ def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, 
         "Wollastonite": (-13.00, 2.84),
         "Larnite": (-13.00, 3.28)
     }
+
+    # feedstock ="Larnite"
     
     rate = mineral_rates[feedstock.title()][0]
     feeddense = mineral_rates[feedstock.title()][1]
+
+    print(rate)
+    print(feeddense)
+
     # Perform calculations
     temp = temp - 273
-    constant_flow = (precip / 1000) / 2
+    constant_flow = precip / 2 #(precip / 1000) / 2  TODO update with new weather
     soilclay_volfrac = (claypercent * claydense) / bulkdense
     soilsilt_volfrac = (siltpercent * siltdense) / bulkdense
+    soilsand_volfrac = (sandpercent * sanddense) / bulkdense
     stock_volfrac = ((float(feedspread)/10)/float(feeddense)) / (bulkdense + ((float(feedspread)/10)/float(feeddense)))
     stock_clayfrac = ((claypercent * claydense) / (bulkdense + ((float(feedspread)/10)/float(feeddense))))
     stock_siltfrac = ((siltpercent * siltdense) / (bulkdense + ((float(feedspread)/10)/float(feeddense))))
+    stock_sandfrac = ((sandpercent * sanddense) / (bulkdense + ((float(feedspread)/10)/float(feeddense))))
+
+    stock_sandfrac = round((stock_sandfrac / 100), 3)
+    stock_siltfrac/= 100
+    stock_clayfrac/= 100
+    stock_volfrac/= 100
+    soilsand_volfrac/= 100
+    soilsilt_volfrac/= 100
+    soilclay_volfrac /= 100
+
+    #normalize
+    # tot = soilsand_volfrac + soilsilt_volfrac + soilclay_volfrac
+    # soilsand_volfrac /=tot
+    # soilsilt_volfrac /=tot
+    # soilclay_volfrac /=tot
+
 
     # Read the template file
-    with open('/home/crunch_user/files/aEWsoil.in', 'r') as file:
-        content = file.read()
+    # with open('/home/crunch_user/files/aEWsoil.in', 'r') as file:
+    #     content = file.read()
+    print("reading lines")
+    with open('/home/crunch_user/files/aEWsoil.in', "r") as file:
+        lines = file.readlines()
 
-    # Make replacements
-    content = content.replace('timeEWm.out 200', f'timeEWm{file_num}.out {years}')
+    print("read lines")
+    years = 200
+    lines[28] = f"time_series    timeEWm{file_num}.out {years}\n"
+
+    # does float work?
+    if(temp > 25):
+        lines[53] = f"set_temperature {temp:.1f}\n"
     
-    if feedstock.lower() != 'basalt':
-        content = content.replace('An50Ab50AS', feedstock)
-        content = content.replace('-rate 1.0e-13', f'-rate {rate:.2e}')
+    # if constant_flow < 0.1:
+    constant_flow = 0.2
+    lines[84] = f'constant_flow   {constant_flow:.1f}\n'
+
+    lines[92] = f'{cec:.1f} cmol/kg\n'
+
+    if(feedstock.lower() == "basalt"):
+        feedstock = 'An50Ab50AS'
+
+
+    #35 padding should be 
+    lines[145] = f"{feedstock}"
+    len_rock = len(feedstock)
+    while(35 - len_rock != 0):
+        lines[145] += " "
+        len_rock += 1
+    lines[145] += f"{stock_volfrac:.9f} ssa  0.5\n" 
+
+    lines[147] = lines[147][:35]  + f"{stock_clayfrac:.9f} ssa 0.1\n"
     
-    content = content.replace('set_temperature 25.0', f'set_temperature {temp:.1f}')
-    content = content.replace('constant_flow 0.0000158', f'constant_flow {constant_flow:.7f}')
-    content = content.replace('8.9 cmol/kg', f'{cec:.1f} cmol/kg')
+    lines[148] = lines[148][:35]  + f"{stock_siltfrac:.9f} ssa 0.1\n"
+    lines[149] = lines[149][:35]  + f"{stock_sandfrac:.9f} ssa 0.1\n"
+
+    # TODO maybe line 157 temperature      25
+
+
+    # Condition NativeSoil  !Same water as above.
+    lines[173] = f"{feedstock}"
+    len_rock = len(feedstock)
+    while(35 - len_rock != 0):
+        lines[173] += " "
+        len_rock += 1
+
+    lines[173] += f"0.00 ssa  3\n" 
+    lines[174] = lines[174][:35]  + f"{soilclay_volfrac:.9f} ssa 1\n"      #TODO change to 0.1
+    lines[175] = lines[175][:35]  + f"{soilsilt_volfrac:.9f} ssa 0.1\n"
+    lines[176] = lines[176][:35]  + f"{soilsand_volfrac:.9f} ssa 0.1\n"
+
+    # line 133 temp?
+
     
-    # Replace in NativeSoil block
-    native_soil_block = content.split('Condition NativeSoil')[1].split('end')[0]
-    new_native_soil_block = native_soil_block.replace('Tracer', f'Tracer\n    {feedstock}')
-    new_native_soil_block = new_native_soil_block.replace('Kaolinite                 0.0', f'Kaolinite                 {soilclay_volfrac:.6f}')
-    new_native_soil_block += f'    K-feldspar               {soilsilt_volfrac:.6f}\n'
-    content = content.replace(native_soil_block, new_native_soil_block)
+    # # Replace in NativeSoil block
+    # # line 43
+    # # line 146
+    # # line 175
+    # # line 213
     
-    # Replace in Feedstock block
-    feedstock_block = content.split('Condition Feedstock')[1].split('end')[0]
-    new_feedstock_block = feedstock_block.replace('Tracer', f'Tracer\n    {feedstock}                  {stock_volfrac:.6f}')
-    new_feedstock_block = new_feedstock_block.replace('Kaolinite                 0.0', f'Kaolinite                 {stock_clayfrac:.6f}')
-    new_feedstock_block += f'    K-Feldspar               {stock_siltfrac:.6f}\n'
-    content = content.replace(feedstock_block, new_feedstock_block)
-    
-    # Add K-Feldspar to MINERALS block
-    minerals_block = content.split('MINERALS')[1].split('END')[0]
-    new_minerals_block = minerals_block + 'K-Feldspar\n    -rate -13.00\n'
-    content = content.replace(minerals_block, new_minerals_block)
+    lines[34] = f"{feedstock}"
+    len_rock = len(feedstock)
+    while(13 - len_rock != 0):
+        lines[34] += " "
+        len_rock += 1
+
+    lines[34] += f"-label default  -rate  {rate:.2f} !DissolutionOnly\n"
+
+    #line 38 change K-feldspar rate ???
+        # new_minerals_block = minerals_block + 'K-Feldspar\n    -rate -13.00\n'
+
 
     # Write the modified content to a new file
-    with open(f'/home/crunch_user/files/{foldername}/aEWsoil_{file_num}.in', 'w') as file:
-        file.write(content)
+    # with open(f'/home/crunch_user/files/{foldername}/aEWsoil_{file_num}.in', 'w') as file:
+    #     file.write(content)
+
+    with open(f'/home/crunch_user/files/{foldername}/aEWsoil_{file_num}.in', "w") as file:
+        file.writelines(lines)
 
     print(f"current folder status {file_num}:")
-    print(ls_user_folder(foldername))
-    print(f"File '/home/crunch_user/files/{foldername}/aEWsoil_{file_num}.in' has been created successfully.")
+    # print(ls_user_folder(foldername))
+    print(f"File '/home/crunch_user/files/{foldername}/aEWsoil_{file_num}.in' has been created successfully.")    
     run_simulation(f'aEWsoil_{file_num}.in', foldername) 
     
 
@@ -211,7 +278,7 @@ def parse_output(n, foldername):
     Ca_arrays = []
 
     for i in range(n):  # Loop through each iteration output file
-        file_path = f'/home/crunch_user/files/{foldername}/timeEW{i}m.out'
+        file_path = f'/home/crunch_user/files/{foldername}/timeEWm{i}.out'
         data_json = read_and_package(file_path, ['Time(yrs)', 'pH', 'Ca++'])
         data = json.loads(data_json)  # Convert JSON string back to dictionary
 
@@ -252,24 +319,24 @@ def parse_output(n, foldername):
     }
 
     # Clean up folder
-    delete_user_folder(foldername)
+    # delete_user_folder(foldername)
 
     return json.dumps(result)
 
 
 
 def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years):
-    bulkdensity = 3.0 #allData["bulkdense"]
+    # bulkdensity = allData["bdod"]
     foldername = generate_unique_filename()
     create_input_folder(foldername)
     print("running algorithms #")
     allData = quantum.runAll(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
-    print("ALL DATA:")
+    # print("ALL DATA:")
     print(allData)
     print("############################################################")
     for i in range(iterations):
         print(i)
-        create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], bulkdensity, i, foldername)
+        create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], allData["bdod"][i], i, foldername, allData["sand"][i])
     return parse_output(iterations, foldername)    # run crunchtop        run_simulation(foldername) 
 
 

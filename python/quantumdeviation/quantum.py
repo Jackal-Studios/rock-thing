@@ -58,7 +58,7 @@ def runAll(soiljson, weatherjson, n, quantum, feedstock, spread, years):
     for layer in soiljson["properties"]["layers"]:
         property_name = layer["name"]
         values = layer["depths"][0]["values"]
-        left, mode, right = values["Q0.05"], values["Q0.5"], values["Q0.95"]
+        left, mode, right = values["Q0.05"]/10, values["Q0.5"]/10, values["Q0.95"]/10
         if left < mode and mode < right:
             pass
         else:

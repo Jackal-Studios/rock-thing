@@ -352,7 +352,7 @@ document.getElementById('run-button').addEventListener('click', function() {
         random_sampler: document.querySelector('input[name="quantum-toggle"]:checked').value === "quantum",
         desired_area: document.getElementById("area-text").value,                       // make sure this is set
         feedstock_surface_density: document.getElementById("feedstock-text").value,     // make sure this is set
-        time_series_years: parseInt(document.getElementById("customSlider").value, 10),
+        time_series_years: (document.getElementById("customSlider").value)*50 + 50,
         rock_type: document.getElementById("dropdown1").value,
         number_of_occurrences: document.getElementById("advanced-mode").checked ? document.getElementById("occurrences-text").value : 10
     };
