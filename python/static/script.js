@@ -177,6 +177,13 @@ function updateCircle(e) {
     info.innerHTML = `<p><strong>Radius:</strong> ${distance.toFixed(2)} km</p><p><strong>Center:</strong> [${centerPoint[0].toFixed(6)}, ${centerPoint[1].toFixed(6)}]</p>`;
 }
 
+
+let prog_int_bar;
+let factInterval;
+let modalOverlay;
+let loaded = false;
+let currentProgress = 0;
+
 function loadingScreen() {
     const rockInfo = {
         basalt: {
@@ -219,10 +226,10 @@ function loadingScreen() {
 
     let currentFactIndex = 0;
     let totalProgress = 100;
-    let progressInterval;
-    let factInterval;
+    // let progressInterval;
+    // let factInterval;
 
-    const modalOverlay = document.createElement('div');
+    modalOverlay = document.createElement('div');
     modalOverlay.id = 'modal-overlay';
     modalOverlay.className = 'modal-overlay';
 
@@ -298,11 +305,11 @@ function loadingScreen() {
 
         currentFactIndex = rotateFunFacts(rockInfo, rockTitle, modalMessage, rockImage, currentFactIndex);
 
-        let currentProgress = 0;
+        // let currentProgress = 0;
 
-        progressInterval = setInterval(() => {
+        prog_int_bar = setInterval(() => {
             if (currentProgress >= totalProgress) {
-                clearInterval(progressInterval);
+                clearInterval(prog_int_bar);
                 clearInterval(factInterval);
                 modalOverlay.style.display = 'none';
                 document.body.removeChild(modalOverlay);
@@ -458,12 +465,23 @@ document.getElementById('run-button').addEventListener('click', function() {
         //     showPopup();
         // });
 
+        // start showing loading screen
+        loaded = false;
+        loadingScreen();
+
         sendCoordinates(inputs)
         .then(result => {
             console.log(result);
             data = result;
             console.log("aaa");
             showPopup();
+            loaded = true;
+            clearInterval(prog_int_bar);
+            clearInterval(factInterval);
+
+            modalOverlay = document.getElementById('modal-overlay');
+            document.body.removeChild(modalOverlay);
+
         }
         
         )
@@ -508,7 +526,7 @@ function formatCa(value) {
         //     y: value
         // }));
          // Multiply Ca++ values by 2 and find min/max
-         const multipliedCa = serverData["Ca++"].map(value => value * 2);
+         const multipliedCa = serverData["Mean_Ca++"].map(value => value * 2);
          const minCa = Math.min(...multipliedCa);
          const maxCa = Math.max(...multipliedCa);
          const range = maxCa - minCa;
@@ -563,13 +581,13 @@ function formatCa(value) {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return `Ca++: ${context.raw.y.toExponential(6)} (mol) / m^2 per year`;
+                                return `CO2: ${context.raw.y.toExponential(6)} (mol) / m^2 per year`;
                             }
                         }
                     }
                 }
             }
-        });
+        }); 
             // const ctx = document.getElementById('timeSeriesChart').getContext('2d');
             
             //   // Calculate min and max for better scaling

@@ -325,12 +325,12 @@ def parse_output(n, foldername):
 
 
 
-def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years):
+def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years, lat, long):
     # bulkdensity = allData["bdod"]
     foldername = generate_unique_filename()
     create_input_folder(foldername)
     print("running algorithms #")
-    allData = quantum.runAll(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
+    allData = quantum.runAll(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years, lat, long)
     # print("ALL DATA:")
     print(allData)
     print("############################################################")
