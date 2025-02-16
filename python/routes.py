@@ -71,6 +71,10 @@ def run_script4():
 def run_script5():
     return crunchflow.get_output(1)      
     
+@main_routes.route('/ls')
+def run_script6():
+    return crunchflow.ls_user_folder("")      
+    
 
 @main_routes.route('/')
 def home():

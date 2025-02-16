@@ -6,6 +6,7 @@ import numpy as np
 from flask import request, jsonify
 import json
 from quantumdeviation import quantum
+from scipy.interpolate import interp1d
 
 
 def hello():
@@ -21,6 +22,7 @@ def run_command(command):
             capture_output=True,
             text=True
         )
+        print(result)
         
         return jsonify({
             'success': True,
@@ -123,25 +125,25 @@ def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, 
         "Larnite": (-13.00, 3.28)
     }
     
-    rate = mineral_rates[feedstock][0]
-    feeddense = mineral_rates[feedstock][1]
+    rate = mineral_rates[feedstock.title()][0]
+    feeddense = mineral_rates[feedstock.title()][1]
     # Perform calculations
     temp = temp - 273
     constant_flow = (precip / 1000) / 2
     soilclay_volfrac = (claypercent * claydense) / bulkdense
     soilsilt_volfrac = (siltpercent * siltdense) / bulkdense
-    stock_volfrac = ((feedspread/10)/feeddense) / (bulkdense + ((feedspread/10)/feeddense))
-    stock_clayfrac = ((claypercent * claydense) / (bulkdense + ((feedspread/10)/feeddense)))
-    stock_siltfrac = ((siltpercent * siltdense) / (bulkdense + ((feedspread/10)/feeddense)))
+    stock_volfrac = ((float(feedspread)/10)/float(feeddense)) / (bulkdense + ((float(feedspread)/10)/float(feeddense)))
+    stock_clayfrac = ((claypercent * claydense) / (bulkdense + ((float(feedspread)/10)/float(feeddense))))
+    stock_siltfrac = ((siltpercent * siltdense) / (bulkdense + ((float(feedspread)/10)/float(feeddense))))
 
     # Read the template file
-    with open('aEWsoil.in', 'r') as file:
+    with open('/home/crunch_user/files/aEWsoil.in', 'r') as file:
         content = file.read()
 
     # Make replacements
     content = content.replace('timeEWm.out 200', f'timeEWm{file_num}.out {years}')
     
-    if feedstock != 'basalt':
+    if feedstock.lower() != 'basalt':
         content = content.replace('An50Ab50AS', feedstock)
         content = content.replace('-rate 1.0e-13', f'-rate {rate:.2e}')
     
@@ -169,10 +171,12 @@ def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, 
     content = content.replace(minerals_block, new_minerals_block)
 
     # Write the modified content to a new file
-    with open(f'aEWsoil_{file_num}.in', 'w') as file:
+    with open(f'/home/crunch_user/files/{foldername}/aEWsoil_{file_num}.in', 'w') as file:
         file.write(content)
 
-    print(f"File 'aEWsoil_{file_num}.in' has been created successfully.")
+    print(f"current folder status {file_num}:")
+    print(ls_user_folder(foldername))
+    print(f"File '/home/crunch_user/files/{foldername}/aEWsoil_{file_num}.in' has been created successfully.")
     run_simulation(f'aEWsoil_{file_num}.in', foldername) 
     
 
@@ -188,33 +192,100 @@ def create_input_folder(foldername):
 
 
 
-def parse_output(foldername):
-    print(f"getting output from: {foldername}")
-    print(ls_user_folder(foldername))
-    # TODO: loop through and calculate data
-    data = read_and_package(f'/home/crunch_user/files/{foldername}/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
-    print(data)
-    #clean up
-    delete_user_folder(foldername)    
-    return data
-    
+# def parse_output(foldername):
+#     print(f"getting output from: {foldername}")
+#     print(ls_user_folder(foldername))
+#     # TODO: loop through and calculate data
+#     data = read_and_package(f'/home/crunch_user/files/{foldername}/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
+#     print(data)
+#     #clean up
+#     delete_user_folder(foldername)    
+#     return data
+
+def parse_output(n, foldername):
+    print(f"Gathering output from: {foldername}")
+
+    # Lists to store time, pH, and Ca++ values for each iteration
+    time_arrays = []
+    pH_arrays = []
+    Ca_arrays = []
+
+    for i in range(n):  # Loop through each iteration output file
+        file_path = f'/home/crunch_user/files/{foldername}/timeEW{i}m.out'
+        data_json = read_and_package(file_path, ['Time(yrs)', 'pH', 'Ca++'])
+        data = json.loads(data_json)  # Convert JSON string back to dictionary
+
+        time = np.array(data['Time(yrs)'])
+        pH = np.array(data['pH'])
+        Ca = np.array(data['Ca++'])
+
+        # Interpolate all curves to a common time scale
+        if len(time_arrays) == 0:
+            common_time = np.linspace(min(time), max(time), 100)  # Define common time points
+
+        pH_interp = interp1d(time, pH, kind='linear', fill_value="extrapolate")
+        Ca_interp = interp1d(time, Ca, kind='linear', fill_value="extrapolate")
+
+        # Store interpolated values
+        time_arrays.append(common_time)
+        pH_arrays.append(pH_interp(common_time))
+        Ca_arrays.append(Ca_interp(common_time))
+
+    # Convert lists to numpy arrays for easy computation
+    pH_arrays = np.array(pH_arrays)  # Shape: (n_iterations, 100)
+    Ca_arrays = np.array(Ca_arrays)  # Shape: (n_iterations, 100)
+
+    # Compute mean and standard deviation across iterations
+    mean_pH = np.mean(pH_arrays, axis=0)
+    std_pH = np.std(pH_arrays, axis=0)
+
+    mean_Ca = np.mean(Ca_arrays, axis=0)
+    std_Ca = np.std(Ca_arrays, axis=0)
+
+    # Package results into a dictionary
+    result = {
+        "Time(yrs)": common_time.tolist(),
+        "Mean_pH": mean_pH.tolist(),
+        "Std_pH": std_pH.tolist(),
+        "Mean_Ca++": mean_Ca.tolist(),
+        "Std_Ca++": std_Ca.tolist()
+    }
+
+    # Clean up folder
+    delete_user_folder(foldername)
+
+    return json.dumps(result)
+
+
 
 def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years):
+    bulkdensity = 3.0 #allData["bulkdense"]
     foldername = generate_unique_filename()
     create_input_folder(foldername)
-
+    print("running algorithms #")
     allData = quantum.runAll(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
+    print("ALL DATA:")
+    print(allData)
+    print("############################################################")
     for i in range(iterations):
-        create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], allData["bulkdense"], i, foldername)
-        run_simulation(foldername) 
-    return parse_output(foldername)    # run crunchtop
+        print(i)
+        create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], bulkdensity, i, foldername)
+    return parse_output(iterations, foldername)    # run crunchtop        run_simulation(foldername) 
+
 
 def handle_json_request(data):
     # do stuff
     # send stuff like this get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
     print(data) #get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
     inputs = data['inputs']
-    out = get_output(data['soilData'], data['weatherData'],inputs.get('number_of_occurrences'), inputs.get('mode'), inputs.get('feedstock_surface_density'), inputs.get('desired_area'), inputs.get('time_series_years'))
+    # weather_data = data['weatherData']
+    with open('quantumdeviation/weather.json', 'r') as file:
+        weather_data = json.load(file)
+    # print(weather_data)
+    print(inputs.get('number_of_occurrences'))
+    print(f"feedstockden:{inputs.get('feedstock_surface_density')}")
+    out = get_output(data['soilData'], weather_data ,inputs.get('number_of_occurrences'), inputs.get('mode'), inputs.get('rock_type'), inputs.get('feedstock_surface_density'), inputs.get('time_series_years'))
+    # return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
     return out
     # for testing:
     # return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])

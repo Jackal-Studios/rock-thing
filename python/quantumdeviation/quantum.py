@@ -42,8 +42,9 @@ def getQuantumSample(n, left, mode, right):
     return random_samples
 
 def getClassicalSample(n, left, mode, right):
-    data = np.random.triangular(left, mode, right, n)
-    return data[:n]
+   array = np.random.triangular(left,mode,right,n)
+   lst = array.tolist()
+   return lst
 
 def getRandomSample(n, left, mode, right, quantum):
     if quantum:
@@ -58,6 +59,19 @@ def runAll(soiljson, weatherjson, n, quantum, feedstock, spread, years):
         property_name = layer["name"]
         values = layer["depths"][0]["values"]
         left, mode, right = values["Q0.05"], values["Q0.5"], values["Q0.95"]
+        if left < mode and mode < right:
+            pass
+        else:
+            if left >= mode:
+                if left >= right:
+                    if right <= mode:
+                        rightTemp = right
+                        leftTemp = left
+                        right = leftTemp
+                        left = rightTemp
+            if left == right:
+                right += 0.01
+                
         soil_samples = getRandomSample(n, left, mode, right, quantum)
         samples[property_name] = soil_samples
 
