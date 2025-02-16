@@ -7,6 +7,87 @@ const map = new mapboxgl.Map({
     zoom: 3
 });
 
+document.querySelectorAll('input[name="mode-toggle"]').forEach(el => {
+    el.addEventListener('change', function () {
+        const advancedOptions = document.getElementById('advanced-options');
+        if (document.getElementById('advanced-mode').checked) {
+            advancedOptions.style.display = 'block';
+        } else {
+            advancedOptions.style.display = 'none';
+        }
+    });
+});
+
+// map.on('load', () => {
+//     document.getElementById('map-toggle').addEventListener('change', function () {
+//         if (this.checked) {
+//             console.log('Toggle is ON');
+//             if (!map.getSource('earthquakes')) {
+//                 map.addSource('earthquakes', {
+//                     type: 'geojson',
+//                     data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
+//                 });
+//             }
+//             if (!map.getLayer('earthquakes-layer')) {
+//                 map.addLayer({
+//                     'id': 'earthquakes-layer',
+//                     'type': 'circle',
+//                     'source': 'earthquakes',
+//                     'paint': {
+//                         'circle-radius': 4,
+//                         'circle-stroke-width': 2,
+//                         'circle-color': 'green',
+//                         'circle-stroke-color': 'white'
+//                     }
+//                 });
+//             }
+//         } else {
+//             console.log('Toggle is OFF');
+//             if (map.getLayer('earthquakes-layer')) {
+//                 map.removeLayer('earthquakes-layer');
+//             }
+//             if (map.getSource('earthquakes')) {
+//                 map.removeSource('earthquakes');
+//             }
+//         }
+//     });
+// });
+
+map.on('load', () => {
+    document.getElementById('map-toggle').addEventListener('change', function () {
+        if (this.checked) {
+            console.log('Toggle is ON');
+            if (!map.getSource('mines')) {
+                map.addSource('mines', {
+                    type: 'geojson',
+                    data: "https://raw.githubusercontent.com/K-Crawford/mines/main/DMR_All_Mines.geojson"
+                });
+            }
+            if (!map.getLayer('mines-layer')) {
+                map.addLayer({
+                    'id': 'mines-layer',
+                    'type': 'circle',
+                    'source': 'mines',
+                    'paint': {
+                        'circle-radius': 5,
+                        'circle-stroke-width': 1,
+                        'circle-color': 'green',
+                        'circle-stroke-color': 'white'
+                    }
+                });
+            }
+        } else {
+            console.log('Toggle is OFF');
+            if (map.getLayer('mines-layer')) {
+                map.removeLayer('mines-layer');
+            }
+            if (map.getSource('mines')) {
+                map.removeSource('mines');
+            }
+        }
+    });
+});
+
 const layerList = document.getElementById('menu');
 const inputs = layerList.getElementsByTagName('input');
 map.getCanvas().style.cursor = 'crosshair';

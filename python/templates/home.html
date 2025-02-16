@@ -24,6 +24,13 @@
             <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors">
             <label for="outdoors-v12">Terrain</label>
         </div>
+
+        <div id="toggle-switch">
+            <input type="checkbox" id="map-toggle" class="toggle-input">
+            <label for="map-toggle" class="toggle-label">
+                <span class="toggle-handle"></span>
+            </label>
+        </div>
     </div>
     
     <div class="sidebar">
@@ -110,17 +117,5 @@
     <script src="{{ url_for('static', filename='apicalls.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
     <!-- <script src="{{ url_for('static', filename='apicalls.js') }}" defer></script> -->
-    <script>
-        document.querySelectorAll('input[name="mode-toggle"]').forEach(el => {
-            el.addEventListener('change', function () {
-                const advancedOptions = document.getElementById('advanced-options');
-                if (document.getElementById('advanced-mode').checked) {
-                    advancedOptions.style.display = 'block';
-                } else {
-                    advancedOptions.style.display = 'none';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
