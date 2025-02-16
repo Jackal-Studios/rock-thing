@@ -104,15 +104,33 @@
         </div>
     </div>
 
-    <div class="popup-overlay" id="popup">
+    <!-- <div class="popup-overlay" id="popup">
         <div class="popup-content">
             <span class="close-btn" onclick="hidePopup()">&times;</span>
             <div id="chart-container">
                 <canvas id="timeSeriesChart"></canvas>
             </div>
         </div>
-    </div>
+    </div> -->
     
+    <div class="popup-overlay" id="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="hidePopup()">&times;</span>
+            <div class="popup-header">
+                <h2 class="popup-title">Simulation Results</h2>
+            </div>
+            <div class="popup-description">
+                <p id="outtext">Total CO2 removed:.. </p>
+            </div>
+            <div id="chart-container">
+                <canvas id="timeSeriesChart"></canvas>
+            </div>
+            <!-- <div class="popup-footer">
+                <p class="popup-note">Additional notes or explanations can go here.</p>
+            </div> -->
+        </div>
+    </div>
+
 
     <script src="{{ url_for('static', filename='apicalls.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>

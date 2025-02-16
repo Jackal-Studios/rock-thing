@@ -269,7 +269,7 @@ def create_input_folder(foldername):
 #     delete_user_folder(foldername)    
 #     return data
 
-def parse_output(n, foldername, prec):
+def parse_output(n, foldername, prec, des_area):
     print(f"Gathering output from: {foldername}")
     constant_flow = prec / 2
     # Lists to store time, pH, and Ca++ values for each iteration
@@ -317,6 +317,11 @@ def parse_output(n, foldername, prec):
     #     "Mean_Ca++": mean_Ca.tolist(),
     #     "Std_Ca++": std_Ca.tolist()
     # }
+    time = np.array(data['Time(yrs)'])
+    common_time = np.linspace(min(time), max(time), 100)  # Define common time points
+
+    area_under_curve = np.trapz(mean_Ca, common_time) * 10000
+
     result = {
         "graphdata": {
             "Time(yrs)": common_time.tolist(),
@@ -324,7 +329,9 @@ def parse_output(n, foldername, prec):
             "Std_pH": std_pH.tolist(),
             "Mean_Ca++": mean_Ca.tolist(),
             "Std_Ca++": std_Ca.tolist(),
-            "flow_rate": constant_flow
+            "flow_rate": constant_flow,
+            "AUC_mean": area_under_curve
+            # "des_area": des_area
         },
         "otherOutput":{
             "Something": True,

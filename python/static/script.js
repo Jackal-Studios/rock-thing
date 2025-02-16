@@ -489,6 +489,7 @@ document.getElementById('run-button').addEventListener('click', function() {
                 modalOverlay = document.getElementById('modal-overlay');
                 document.body.removeChild(modalOverlay);
                 showPopup();
+
             }, 360); 
             
 
@@ -540,12 +541,16 @@ function formatCa(value) {
         //     y: value
         // }));
          // Multiply Ca++ values by 2 and find min/max
-         const multipliedCa = serverData["graphdata"]["Mean_Ca++"].map(value => value * 2 * serverData["graphdata"]["flow_rate"]);
+         document.getElementById('outtext').innerHTML = "Total CO2 removed in mol: " + serverData["graphdata"]["AUC_mean"] * serverData["graphdata"]["AUC_mean"]["des_area"] * 100;
+
+
+
+         const multipliedCa = serverData["graphdata"]["Mean_Ca++"].map(value => value * 2 * serverData["graphdata"]["flow_rate"] * 10000);
          const minCa = Math.min(...multipliedCa);
          const maxCa = Math.max(...multipliedCa);
          const range = maxCa - minCa;
 
-         const multipliedStdCa = serverData["graphdata"]["Std_Ca++"].map(value => value * 2 * serverData["graphdata"]["flow_rate"]);
+         const multipliedStdCa = serverData["graphdata"]["Std_Ca++"].map(value => value * 2 * serverData["graphdata"]["flow_rate"] * 10000);
 
          // Create data points with multiplied values
          const dataPoints = multipliedCa.map((value, index) => ({
@@ -558,6 +563,8 @@ function formatCa(value) {
             x: serverData["graphdata"]["Time(yrs)"][index],
             y: value + multipliedStdCa[index]
         }));
+
+        max_upper = Math.max(...upperBound);
 
         const lowerBound = multipliedCa.map((value, index) => ({
             x: serverData["graphdata"]["Time(yrs)"][index],
@@ -576,7 +583,7 @@ function formatCa(value) {
                         backgroundColor: 'rgb(88,129,87)',
                         tension: 0.1,
                         pointRadius: 3,
-                        borderWidth: 2
+                        borderWidth: 3
                     },
                     {
                         label: 'Upper bound',
@@ -619,7 +626,7 @@ function formatCa(value) {
                             text: 'CO2 (mol) / m^2 per year'
                         },
                         min: minCa - (range * 0.1),
-                        max: maxCa + (range * 0.1),
+                        max: max_upper + (range * 0.1),
                         ticks: {
                             callback: function(value) {
                                 return value.toExponential(6);
