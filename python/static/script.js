@@ -1,4 +1,4 @@
-import { sendCoordinates, progressBar } from './apicalls.js';
+
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0Y3Jhd2ZvcmQiLCJhIjoiY203NXJ0ZTR6MDB3MzJucHo2ZmppNmR1YSJ9.KKea34jSVKuLRBfYQhSfJw';
 
@@ -97,9 +97,10 @@ function updateCircle(e) {
     info.innerHTML = `<p><strong>Radius:</strong> ${distance.toFixed(2)} km</p><p><strong>Center:</strong> [${centerPoint[0].toFixed(6)}, ${centerPoint[1].toFixed(6)}]</p>`;
 }
 
+
 document.getElementById('run-button').addEventListener('click', function() {
     if (centerPoint) {
-        sendCoordinates(centerPoint[1], centerPoint[0]);
+        apicalls.sendCoordinates(centerPoint[1], centerPoint[0]); // Note: latitude comes first
     }
 
     // const selectedRock = document.getElementById('dropdown1').value;
