@@ -11,6 +11,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
     <div id="map"></div>
@@ -25,6 +26,8 @@
         </div>
     </div>
     
+    
+
     <div class="sidebar">
         <div class="dropdown-box">
             <label for="dropdown1">Rock Types:</label>
@@ -52,6 +55,15 @@
     <div id="modal" class="modal">
         <div class="modal-content">
             <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="hidePopup()">&times;</span>
+            <div id="chart-container">
+                <canvas id="timeSeriesChart"></canvas>
+            </div>
         </div>
     </div>
     
