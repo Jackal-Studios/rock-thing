@@ -9,6 +9,7 @@ const map = new mapboxgl.Map({
 
 const layerList = document.getElementById('menu');
 const inputs = layerList.getElementsByTagName('input');
+map.getCanvas().style.cursor = 'crosshair';
 
 for (const input of inputs) {
     input.onclick = (layer) => {
@@ -342,9 +343,21 @@ function loadingScreen() {
 // Trigger the loading screen when needed
 document.getElementById('run-button').addEventListener('click', function() {
     loadingScreen();
+
+    const inputs = {
+        latitude: centerPoint[1],
+        longitude: centerPoint[0],
+        mode: document.querySelector('input[name="mode-toggle"]:checked').value === "advanced",
+        random_sampler: document.querySelector('input[name="quantum-toggle"]:checked').value === "quantum",
+        desired_area: document.getElementById("area-text").value,
+        feedstock_surface_density: document.getElementById("feedstock-text").value,
+        time_series_years: parseInt(document.getElementById("customSlider").value, 10),
+        rock_type: document.getElementById("dropdown1").value,
+        number_of_occurrences: document.getElementById("advanced-mode").checked ? document.getElementById("occurrences-text").value : null
+    };
     
     if (centerPoint) {
-        apicalls.sendCoordinates(centerPoint[1], centerPoint[0]).then(serverResponse => {
+        apicalls.sendCoordinates(inputs).then(serverResponse => {
             // serverResponse will be just the final server response
             data = serverResponse;
             console.log("aaa");

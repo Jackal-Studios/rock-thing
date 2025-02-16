@@ -3,7 +3,7 @@ import json
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 
-def getRandomSample(n, left, mode, right):
+def getQuantumSample(n, left, mode, right):
 
     data = np.random.triangular(left, mode, right, 10000)
 
@@ -41,7 +41,16 @@ def getRandomSample(n, left, mode, right):
 
     return random_samples
 
-def runAll(soiljson, weatherjson, n):
+def getClassicalSample(n, left, mode, right):
+    data = np.random.triangular(left, mode, right, n)
+    return data[:n]
+
+def getRandomSample(n, left, mode, right, quantum):
+    if quantum:
+        return getQuantumSample(n, left, mode, right)
+    return getClassicalSample(n, left, mode, right)
+
+def runAll(soiljson, weatherjson, n, quantum):
     
     samples = {}
 
@@ -49,7 +58,7 @@ def runAll(soiljson, weatherjson, n):
         property_name = layer["name"]
         values = layer["depths"][0]["values"]
         left, mode, right = values["Q0.05"], values["Q0.5"], values["Q0.95"]
-        soil_samples = getRandomSample(n, left, mode, right)
+        soil_samples = getRandomSample(n, left, mode, right, quantum)
         samples[property_name] = soil_samples
 
     weather_result = weatherjson['result'][0]
@@ -59,7 +68,7 @@ def runAll(soiljson, weatherjson, n):
 
     left, mode, right = precipitation_stats["min"], precipitation_stats["mean"], precipitation_stats["max"]
 
-    precip_samples = getRandomSample(n, left, mode, right)
+    precip_samples = getRandomSample(n, left, mode, right, quantum)
 
     samples["precipitation"] = precip_samples
 
@@ -68,13 +77,26 @@ def runAll(soiljson, weatherjson, n):
 
     left, mode, right = temp_stats["record_min"], temp_stats["mean"], temp_stats["record_max"]
 
-    temp_samples = getRandomSample(n, left, mode, right)
+    temp_samples = getRandomSample(n, left, mode, right, quantum)
 
     for temp in range(len(temp_samples)):
         if temp_samples[temp] < 25:
             temp_samples[temp] = 25
     
     samples["temperature"] = temp_samples
+
+    feedstockList = []
+    spreadList = []
+    yearList = []
+
+    for _ in range(n):
+        feedstockList.append(feedstock)
+        spreadList.append(spread)
+        yearList.append(years)
+
+    samples["feedstock"] = feedstockList
+    samples["spread"] = spreadList
+    samples["years"] = yearList
 
     return samples
 
@@ -84,5 +106,13 @@ with open('soilgridall.json', 'r') as file:
 with open('weather.json', 'r') as file:
     weather_data = json.load(file)
 
-output = runAll(soilgrids_data, weather_data, 10)
+n = 10
+quantum = True #uses quantum?
+feedstock = "basalt"
+spread = 10
+years = 50
+
+#note: does not use area
+
+output = runAll(soilgrids_data, weather_data, n, quantum, feedstock, spread, years)
 print(output)
