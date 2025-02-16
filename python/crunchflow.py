@@ -2,7 +2,10 @@ import os
 import time
 import random, string
 import subprocess
+import numpy as np
 from flask import request, jsonify
+import json
+
 
 def hello():
     print("hi")
@@ -30,6 +33,30 @@ def run_command(command):
             'success': False,
             'error': str(e)
         }), 500
+
+
+
+def read_and_package(file_path, columns):
+    # Load data, skip first line (metadata) and header line
+    data = np.loadtxt(file_path, skiprows=2)
+    
+    # Get column indices (based on the file format you showed)
+    column_indices = {
+        'Time(yrs)': 0,
+        'pH': 1,
+        'H+': 2,
+        'CO2(aq)': 3,
+        'Mg++': 4,
+        'Ca++': 5
+    }
+    
+    # Create dictionary with requested columns
+    result = {
+        col: data[:, column_indices[col]].tolist()
+        for col in columns
+    }
+    
+    return json.dumps(result)
 
 
 def create_user_folder(foldername):
@@ -77,11 +104,12 @@ def create_input_folder(input_data, foldername):
 def parse_output(foldername):
     print(f"getting output from: {foldername}")
     print(ls_user_folder(foldername))
+    data = read_and_package(f'/home/crunch_user/files/{foldername}/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
+    print(data)
 
-    # TODO: parse output data
-
-    # clean up
-    return delete_user_folder(foldername)
+    #clean up
+    delete_user_folder(foldername)    
+    return data
     
 
 def get_output(input_data):
