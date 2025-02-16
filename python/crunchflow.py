@@ -269,7 +269,7 @@ def create_input_folder(foldername):
 #     delete_user_folder(foldername)    
 #     return data
 
-def parse_output(n, foldername, prec, des_area):
+def parse_output(n, foldername, prec):
     print(f"Gathering output from: {foldername}")
     constant_flow = prec / 2
     # Lists to store time, pH, and Ca++ values for each iteration

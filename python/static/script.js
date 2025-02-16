@@ -541,7 +541,7 @@ function formatCa(value) {
         //     y: value
         // }));
          // Multiply Ca++ values by 2 and find min/max
-         document.getElementById('outtext').innerHTML = "Total CO2 removed in mol: " + serverData["graphdata"]["AUC_mean"] * serverData["graphdata"]["AUC_mean"]["des_area"] * 100;
+         document.getElementById('outtext').innerHTML = "Total CO2 removed in mol: " + serverData["graphdata"]["AUC_mean"] * 100;
 
 
 
