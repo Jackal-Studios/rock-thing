@@ -78,12 +78,13 @@ def runAll(soiljson, weatherjson, n):
 
     return samples
 
-with open('soilgridall.json', 'r') as file:
-    soilgrids_data = json.load(file)
+# example:
+# with open('soilgridall.json', 'r') as file:
+#     soilgrids_data = json.load(file)
 
-with open('weather.json', 'r') as file:
-    weather_data = json.load(file)
+# with open('weather.json', 'r') as file:
+#     weather_data = json.load(file)
 
-output = runAll(soilgrids_data, weather_data, 10)
+# output = runAll(soilgrids_data, weather_data, 10)
 
-print (output)
+# print (output)

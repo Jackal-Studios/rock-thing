@@ -5,7 +5,7 @@ import subprocess
 import numpy as np
 from flask import request, jsonify
 import json
-from quantum_deviation.quantum import *
+from quantumdeviation import quantum
 
 
 def hello():
@@ -209,7 +209,7 @@ def create_input_folder(foldername):
 def parse_output(foldername):
     print(f"getting output from: {foldername}")
     print(ls_user_folder(foldername))
-    # loop through and calculate data
+    # TODO: loop through and calculate data
     data = read_and_package(f'/home/crunch_user/files/{foldername}/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
     print(data)
     #clean up
@@ -221,9 +221,15 @@ def get_output(soilgrids_data, weather_data, iterations):
     foldername = generate_unique_filename()
     create_input_folder(foldername)
 
-    allData = runAll(soilgrids_data, weather_data, iterations)
+    allData = quantum.runAll(soilgrids_data, weather_data, iterations)
     for i in range(iterations):
         create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], allData["bulkdense"], i, foldername)
         run_simulation(foldername) 
     return parse_output(foldername)    # run crunchtop
-    # return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
+
+def handle_json_request(data):
+    # do stuff
+    # send stuff like this get_output(soilgrids_data, weather_data, iterations)
+
+    # for testing:
+    return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])

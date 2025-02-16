@@ -84,8 +84,9 @@ def save_soil_data():
     # print(data)
     # sent the output to the parse output and return
 
-    resp = crunchflow.get_output(data)
-    
+    # resp = crunchflow.get_output(data)
+    resp = crunchflow.handle_json_request(data)
+
     return resp
     
 
