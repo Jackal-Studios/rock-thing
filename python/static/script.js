@@ -379,73 +379,148 @@ function formatCa(value) {
 
         function createChart(serverData) {
             const ctx = document.getElementById('timeSeriesChart').getContext('2d');
-            
-              // Calculate min and max for better scaling
-              const caValues = serverData["Ca++"];
-              const minCa = Math.min(...caValues);
-              const maxCa = Math.max(...caValues);
-              const range = maxCa - minCa;
-              
-              const dataPoints = serverData["Ca++"].map((value, index) => ({
-                x: index,  // Use index for equal spacing
-                y: value
-            }));
 
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: serverData["Time(yrs)"],
-                    datasets: [{
-                        label: 'Ca++ vs Time',
-                        data: serverData["Ca++"],
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1,
-                        pointRadius: 3,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'logarithmic',
-                            title: {
-                                display: true,
-                                text: 'Time (years)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return formatTime(value);
-                                }
-                            }
+        // Find min and max for optimal scaling
+        // const minCa = Math.min(...serverData["Ca++"]);
+        // const maxCa = Math.max(...serverData["Ca++"]);
+        // const range = maxCa - minCa;
+
+        // // Create data points with indices for equal spacing
+        // const dataPoints = serverData["Ca++"].map((value, index) => ({
+        //     x: serverData["Time(yrs)"][index],
+        //     y: value
+        // }));
+         // Multiply Ca++ values by 2 and find min/max
+         const multipliedCa = serverData["Ca++"].map(value => value * 2);
+         const minCa = Math.min(...multipliedCa);
+         const maxCa = Math.max(...multipliedCa);
+         const range = maxCa - minCa;
+
+         // Create data points with multiplied values
+         const dataPoints = multipliedCa.map((value, index) => ({
+             x: serverData["Time(yrs)"][index],
+             y: value
+         }));
+
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Rate of removal of CO2 per m^2 per year',
+                    data: dataPoints,
+                    borderColor: 'rgb(88,129,87)',
+                    tension: 0.1,
+                    pointRadius: 3,
+                    borderWidth: 1.5
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: 'Time (years)'
                         },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Ca++ (mol/L)'
-                            },
-                            min: minCa - (range * 0.1),
-                            max: maxCa + (range * 0.1),
-                            ticks: {
-                                callback: function(value) {
-                                    return formatCa(value);
-                                }
-                            }
+                        ticks: {
+                            stepSize: 1
                         }
                     },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `Ca++: ${context.raw}`;
-                                },
-                                title: function(context) {
-                                    return `Time: ${formatTime(context[0].raw)}`;
-                                }
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'CO2 (mol) / m^2 per year'
+                        },
+                        min: minCa - (range * 0.1),
+                        max: maxCa + (range * 0.1),
+                        ticks: {
+                            callback: function(value) {
+                                return value.toExponential(6);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Ca++: ${context.raw.y.toExponential(6)} (mol) / m^2 per year`;
                             }
                         }
                     }
                 }
-            });
+            }
+        });
+            // const ctx = document.getElementById('timeSeriesChart').getContext('2d');
+            
+            //   // Calculate min and max for better scaling
+            //   const caValues = serverData["Ca++"];
+            //   const minCa = Math.min(...caValues);
+            //   const maxCa = Math.max(...caValues);
+            //   const range = maxCa - minCa;
+              
+            //   const dataPoints = serverData["Ca++"].map((value, index) => ({
+            //     x: index,  // Use index for equal spacing
+            //     y: value
+            // }));
+
+            // chart = new Chart(ctx, {
+            //     type: 'line',
+            //     data: {
+            //         labels: serverData["Time(yrs)"],
+            //         datasets: [{
+            //             label: 'Ca++ vs Time',
+            //             data: serverData["Ca++"],
+            //             borderColor: 'rgb(75, 192, 192)',
+            //             tension: 0.1,
+            //             pointRadius: 3,
+            //         }]
+            //     },
+            //     options: {
+            //         responsive: true,
+            //         scales: {
+            //             x: {
+            //                 type: 'logarithmic',
+            //                 title: {
+            //                     display: true,
+            //                     text: 'Time (years)'
+            //                 },
+            //                 ticks: {
+            //                     callback: function(value) {
+            //                         return formatTime(value);
+            //                     }
+            //                 }
+            //             },
+            //             y: {
+            //                 title: {
+            //                     display: true,
+            //                     text: 'Ca++ (mol/L)'
+            //                 },
+            //                 min: minCa - (range * 0.1),
+            //                 max: maxCa + (range * 0.1),
+            //                 ticks: {
+            //                     callback: function(value) {
+            //                         return formatCa(value);
+            //                     }
+            //                 }
+            //             }
+            //         },
+            //         plugins: {
+            //             tooltip: {
+            //                 callbacks: {
+            //                     label: function(context) {
+            //                         return `Ca++: ${context.raw}`;
+            //                     },
+            //                     title: function(context) {
+            //                         return `Time: ${formatTime(context[0].raw)}`;
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // });
         }
 
         // Close popup when clicking outside

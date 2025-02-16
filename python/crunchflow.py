@@ -123,10 +123,10 @@ def parse_output(foldername):
     
 
 def get_output(input_data):
-    foldername = generate_unique_filename()
-    create_input_folder(foldername)
-    # loop over
-    run_simulation(input_data, foldername, "aEWbinary.in")  #TODO change this ?
+    # foldername = generate_unique_filename()
+    # create_input_folder(foldername)
+    # # loop over
+    # run_simulation(input_data, foldername, "aEWbinary.in")  #TODO change this ?
     # print("input folder created")
     # return parse_output(foldername)    # run crunchtop
     return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
