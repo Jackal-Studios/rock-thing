@@ -1,93 +1,6 @@
-import os
-import time
-import random, string
-import subprocess
-import numpy as np
-from flask import request, jsonify
-import json
-from quantum_deviation.quantum import *
+def generate_ew_soil_file(years, feedstock, claypercent, siltpercent, temp, precip, cec, 
+                          feedspread, feeddense, bulkdense, claydense, siltdense, file_num):
 
-
-def hello():
-    print("hi")
-
-
-def run_command(command):
-    try:
-        full_command = f"docker exec topcrunch-custom {command}"
-        result = subprocess.run(
-            full_command,
-            shell=True,
-            capture_output=True,
-            text=True
-        )
-        
-        return jsonify({
-            'success': True,
-            'stdout': result.stdout,
-            'stderr': result.stderr,
-            'exit_code': result.returncode
-        })
-        
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
-
-
-def read_and_package(file_path, columns):
-    # Load data, skip first line (metadata) and header line
-    data = np.loadtxt(file_path, skiprows=2)
-    
-    # Get column indices (based on the file format you showed)
-    column_indices = {
-        'Time(yrs)': 0,
-        'pH': 1,
-        'H+': 2,
-        'CO2(aq)': 3,
-        'Mg++': 4,
-        'Ca++': 5
-    }
-    
-    # Create dictionary with requested columns
-    result = {
-        col: data[:, column_indices[col]].tolist()
-        for col in columns
-    }
-    
-    return json.dumps(result)
-
-
-def create_user_folder(foldername):
-    return run_command(f'bash -c "cd /home/crunch_user/files && mkdir -p {foldername} && cp *.dbs {foldername}/ && ls {foldername}"')
-
-def delete_user_folder(foldername):
-    return run_command(f'bash -c "cd /home/crunch_user/files && rm -rf {foldername} && ls /home/crunch_user/files"')
-
-def ls_user_folder(foldername):
-    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && ls"')
-
-
-
-
-def randomword(length):
-   letters = string.ascii_lowercase
-   return ''.join(random.choice(letters) for i in range(length))
-
-def current_milli_time():
-    return round(time.time() * 1000)
-
-def generate_unique_filename():
-    return str(current_milli_time()) + randomword(10)
-
-def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, cec, 
-                          feedspread, bulkdense, file_num, foldername):
-
-    claydense = 2.65
-    siltdense = 2.60
-    # rates and density for feedstocks
     mineral_rates = {
         "Basalt": -13.00,
         "HCl(c)": -10.00,
@@ -140,8 +53,7 @@ def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, 
         "Larnite": -13.00
     }
     
-    rate = mineral_rates[feedstock][0]
-    feeddense = mineral_rates[feedstock][1]
+    rate = mineral_rates.get(feedstock, None)
     # Perform calculations
     temp = temp - 273
     constant_flow = (precip / 1000) / 2
@@ -192,38 +104,3 @@ def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, 
     print(f"File 'aEWsoil_{file_num}.in' has been created successfully.")
 
     
-
-# docker exec topcrunch-custom bash -c "cd /home/crunch_user/files && CrunchTope aEWbinary.in"
-def run_simulation(input_data, foldername):
-    # run crunchflow
-    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && CrunchTope {inputfilename} && ls"')
-
-
-def create_input_folder(foldername):
-    print(f"input folder '{foldername}' creating...")
-    create_user_folder(foldername)
-    # return create_input_file(input_data, foldername)
-
-
-
-def parse_output(foldername):
-    print(f"getting output from: {foldername}")
-    print(ls_user_folder(foldername))
-    # loop through and calculate data
-    data = read_and_package(f'/home/crunch_user/files/{foldername}/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
-    print(data)
-    #clean up
-    delete_user_folder(foldername)    
-    return data
-    
-
-def get_output(soilgrids_data, weather_data, iterations):
-    foldername = generate_unique_filename()
-    create_input_folder(foldername)
-
-    allData = runAll(soilgrids_data, weather_data, iterations)
-    for i in range(iterations):
-        create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], allData["bulkdense"], i, foldername)
-        run_simulation(foldername) 
-    return parse_output(foldername)    # run crunchtop
-    # return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
