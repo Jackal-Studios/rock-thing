@@ -184,6 +184,10 @@ let modalOverlay;
 let loaded = false;
 let currentProgress = 0;
 
+function updateProgressBar(progressBarFill, value) {
+    progressBarFill.style.width = value + '%';
+}
+
 function loadingScreen() {
     const rockInfo = {
         basalt: {
@@ -245,7 +249,8 @@ function loadingScreen() {
     
     const progressBarFill = document.createElement('span');
     progressBarFill.className = 'progress-bar-fill';
-    
+    progressBarFill.id = 'prog-bar';
+
     progressBar.appendChild(progressBarFill);
     
     const contentWrapper = document.createElement('div');
@@ -285,9 +290,7 @@ function loadingScreen() {
 
     document.body.appendChild(modalOverlay);
 
-    function updateProgressBar(progressBarFill, value) {
-        progressBarFill.style.width = value + '%';
-    }
+    
 
     function rotateFunFacts(funFacts, rockTitle, modalMessage, imageElement, currentIndex) {
         const rockKeys = Object.keys(funFacts);
@@ -299,7 +302,7 @@ function loadingScreen() {
         return (currentIndex + 1) % rockKeys.length;
     }
 
-    function progressBar1(rockInfo, progressIntervalTime = 3000, factIntervalTime = 5000) {
+    function progressBar1(rockInfo, progressIntervalTime = 2000, factIntervalTime = 5000) {
         console.log('');
         modalOverlay.style.display = 'flex';
 
@@ -479,8 +482,17 @@ document.getElementById('run-button').addEventListener('click', function() {
             clearInterval(prog_int_bar);
             clearInterval(factInterval);
 
-            modalOverlay = document.getElementById('modal-overlay');
-            document.body.removeChild(modalOverlay);
+            currentProgress = 100;
+            prog_fill = document.getElementById('prog-bar');
+            updateProgressBar(prog_fill, currentProgress);
+        
+            setTimeout(() => {
+                modalOverlay = document.getElementById('modal-overlay');
+                document.body.removeChild(modalOverlay);
+            }, 360); 
+            
+
+            
 
         }
         
