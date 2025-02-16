@@ -477,7 +477,6 @@ document.getElementById('run-button').addEventListener('click', function() {
             console.log(result);
             data = result;
             console.log("aaa");
-            showPopup();
             loaded = true;
             clearInterval(prog_int_bar);
             clearInterval(factInterval);
@@ -489,6 +488,7 @@ document.getElementById('run-button').addEventListener('click', function() {
             setTimeout(() => {
                 modalOverlay = document.getElementById('modal-overlay');
                 document.body.removeChild(modalOverlay);
+                showPopup();
             }, 360); 
             
 
@@ -527,6 +527,8 @@ function formatCa(value) {
         function createChart(serverData) {
             const ctx = document.getElementById('timeSeriesChart').getContext('2d');
 
+        
+
         // Find min and max for optimal scaling
         // const minCa = Math.min(...serverData["Ca++"]);
         // const maxCa = Math.max(...serverData["Ca++"]);
@@ -538,29 +540,65 @@ function formatCa(value) {
         //     y: value
         // }));
          // Multiply Ca++ values by 2 and find min/max
-         const multipliedCa = serverData["Mean_Ca++"].map(value => value * 2);
+         const multipliedCa = serverData["graphdata"]["Mean_Ca++"].map(value => value * 2 * serverData["graphdata"]["flow_rate"]);
          const minCa = Math.min(...multipliedCa);
          const maxCa = Math.max(...multipliedCa);
          const range = maxCa - minCa;
 
+         const multipliedStdCa = serverData["graphdata"]["Std_Ca++"].map(value => value * 2 * serverData["graphdata"]["flow_rate"]);
+
          // Create data points with multiplied values
          const dataPoints = multipliedCa.map((value, index) => ({
-             x: serverData["Time(yrs)"][index],
+             x: serverData["graphdata"]["Time(yrs)"][index],
              y: value
          }));
+
+         // Create data points for error bounds
+        const upperBound = multipliedCa.map((value, index) => ({
+            x: serverData["graphdata"]["Time(yrs)"][index],
+            y: value + multipliedStdCa[index]
+        }));
+
+        const lowerBound = multipliedCa.map((value, index) => ({
+            x: serverData["graphdata"]["Time(yrs)"][index],
+            y: value - multipliedStdCa[index]
+        }));
 
 
         const chart = new Chart(ctx, {
             type: 'line',
             data: {
-                datasets: [{
-                    label: 'Rate of removal of CO2 per m^2 per year',
-                    data: dataPoints,
-                    borderColor: 'rgb(88,129,87)',
-                    tension: 0.1,
-                    pointRadius: 3,
-                    borderWidth: 1.5
-                }]
+                datasets: [
+                    {
+                        label: 'Rate of removal of CO2 per m^2 per year',
+                        data: dataPoints,
+                        borderColor: 'rgb(88,129,87)',
+                        backgroundColor: 'rgb(88,129,87)',
+                        tension: 0.1,
+                        pointRadius: 3,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Upper bound',
+                        data: upperBound,
+                        borderColor: 'rgba(88,129,87,0.4)',
+                        backgroundColor: 'rgba(88,129,87,0.3)',
+                        tension: 0.1,
+                        pointRadius: 0,
+                        borderWidth: 1.5,
+                        fill: 1  // Fill to the lower bound
+                    },
+                    {
+                        label: 'Lower bound',
+                        data: lowerBound,
+                        borderColor: 'rgba(88,129,87,0.4)',
+                        backgroundColor: 'rgba(88,129,87,0.3)',
+                        tension: 0.1,
+                        pointRadius: 0,
+                        borderWidth: 1.5,
+                        fill: false
+                    }
+                ]
             },
             options: {
                 responsive: true,
@@ -593,81 +631,75 @@ function formatCa(value) {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return `CO2: ${context.raw.y.toExponential(6)} (mol) / m^2 per year`;
+                                if (context.datasetIndex === 0) {
+                                    return `Rate of removal of CO2 ${context.raw.y.toExponential(6)} (mol) / m^2 per year`;
+                                }
+                                return '';  // Hide tooltips for     bounds
+                            }
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            filter: function(item) {
+                                // Only show the main line in legend
+                                return item.text === 'Rate of removal of CO2 per m^2 per year';
                             }
                         }
                     }
                 }
             }
-        }); 
-            // const ctx = document.getElementById('timeSeriesChart').getContext('2d');
-            
-            //   // Calculate min and max for better scaling
-            //   const caValues = serverData["Ca++"];
-            //   const minCa = Math.min(...caValues);
-            //   const maxCa = Math.max(...caValues);
-            //   const range = maxCa - minCa;
-              
-            //   const dataPoints = serverData["Ca++"].map((value, index) => ({
-            //     x: index,  // Use index for equal spacing
-            //     y: value
-            // }));
+        });
 
-            // chart = new Chart(ctx, {
-            //     type: 'line',
-            //     data: {
-            //         labels: serverData["Time(yrs)"],
-            //         datasets: [{
-            //             label: 'Ca++ vs Time',
-            //             data: serverData["Ca++"],
-            //             borderColor: 'rgb(75, 192, 192)',
-            //             tension: 0.1,
-            //             pointRadius: 3,
-            //         }]
-            //     },
-            //     options: {
-            //         responsive: true,
-            //         scales: {
-            //             x: {
-            //                 type: 'logarithmic',
-            //                 title: {
-            //                     display: true,
-            //                     text: 'Time (years)'
-            //                 },
-            //                 ticks: {
-            //                     callback: function(value) {
-            //                         return formatTime(value);
-            //                     }
-            //                 }
-            //             },
-            //             y: {
-            //                 title: {
-            //                     display: true,
-            //                     text: 'Ca++ (mol/L)'
-            //                 },
-            //                 min: minCa - (range * 0.1),
-            //                 max: maxCa + (range * 0.1),
-            //                 ticks: {
-            //                     callback: function(value) {
-            //                         return formatCa(value);
-            //                     }
-            //                 }
-            //             }
-            //         },
-            //         plugins: {
-            //             tooltip: {
-            //                 callbacks: {
-            //                     label: function(context) {
-            //                         return `Ca++: ${context.raw}`;
-            //                     },
-            //                     title: function(context) {
-            //                         return `Time: ${formatTime(context[0].raw)}`;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            // });
+        //         datasets: [{
+        //             label: 'Rate of removal of CO2 per m^2 per year',
+        //             data: dataPoints,
+        //             borderColor: 'rgb(88,129,87)',
+        //             tension: 0.1,
+        //             pointRadius: 3,
+        //             borderWidth: 1.5
+        //         }]
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         scales: {
+        //             x: {
+        //                 type: 'linear',
+        //                 title: {
+        //                     display: true,
+        //                     text: 'Time (years)'
+        //                 },
+        //                 ticks: {
+        //                     stepSize: 1
+        //                 }
+        //             },
+        //             y: {
+        //                 title: {
+        //                     display: true,
+        //                     text: 'CO2 (mol) / m^2 per year'
+        //                 },
+        //                 min: minCa - (range * 0.1),
+        //                 max: maxCa + (range * 0.1),
+        //                 ticks: {
+        //                     callback: function(value) {
+        //                         return value.toExponential(6);
+        //                     }
+        //                 }
+        //             }
+        //         },
+        //         plugins: {
+        //             tooltip: {
+        //                 callbacks: {
+        //                     label: function(context) {
+        //                         return `CO2: ${context.raw.y.toExponential(6)} (mol) / m^2 per year`;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }); 
+
+        
+           
         }
 
         // Close popup when clicking outside

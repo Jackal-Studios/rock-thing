@@ -269,9 +269,9 @@ def create_input_folder(foldername):
 #     delete_user_folder(foldername)    
 #     return data
 
-def parse_output(n, foldername):
+def parse_output(n, foldername, prec):
     print(f"Gathering output from: {foldername}")
-
+    constant_flow = prec / 2
     # Lists to store time, pH, and Ca++ values for each iteration
     time_arrays = []
     pH_arrays = []
@@ -310,16 +310,29 @@ def parse_output(n, foldername):
     std_Ca = np.std(Ca_arrays, axis=0)
 
     # Package results into a dictionary
+    # result = {
+    #     "Time(yrs)": common_time.tolist(),
+    #     "Mean_pH": mean_pH.tolist(),
+    #     "Std_pH": std_pH.tolist(),
+    #     "Mean_Ca++": mean_Ca.tolist(),
+    #     "Std_Ca++": std_Ca.tolist()
+    # }
     result = {
-        "Time(yrs)": common_time.tolist(),
-        "Mean_pH": mean_pH.tolist(),
-        "Std_pH": std_pH.tolist(),
-        "Mean_Ca++": mean_Ca.tolist(),
-        "Std_Ca++": std_Ca.tolist()
+        "graphdata": {
+            "Time(yrs)": common_time.tolist(),
+            "Mean_pH": mean_pH.tolist(),
+            "Std_pH": std_pH.tolist(),
+            "Mean_Ca++": mean_Ca.tolist(),
+            "Std_Ca++": std_Ca.tolist(),
+            "flow_rate": constant_flow
+        },
+        "otherOutput":{
+            "Something": True,
+        }
     }
 
     # Clean up folder
-    # delete_user_folder(foldername)
+    delete_user_folder(foldername)
 
     return json.dumps(result)
 
@@ -334,10 +347,13 @@ def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, 
     # print("ALL DATA:")
     print(allData)
     print("############################################################")
+    mean_prec = 0
     for i in range(iterations):
         print(i)
+        mean_prec += allData["precipitation"][i]
         create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], allData["bdod"][i], i, foldername, allData["sand"][i])
-    return parse_output(iterations, foldername)    # run crunchtop        run_simulation(foldername) 
+    mean_prec /= iterations
+    return parse_output(iterations, foldername, mean_prec)    # run crunchtop        run_simulation(foldername) 
 
 
 def handle_json_request(data):
