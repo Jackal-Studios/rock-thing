@@ -357,13 +357,24 @@ document.getElementById('run-button').addEventListener('click', function() {
     };
     
     if (centerPoint) {
-        apicalls.sendCoordinates(inputs).then(serverResponse => {
-            // serverResponse will be just the final server response
-            data = serverResponse;
+        // apicalls.sendCoordinates(inputs).then(serverResponse => {
+        //     // serverResponse will be just the final server response
+        //     data = serverResponse;
+        //     console.log("aaa");
+        //     console.log(serverResponse);
+        //     showPopup();
+        // });
+
+        sendCoordinates(inputs)
+        .then(result => {
+            console.log(result);
+            data = result;
             console.log("aaa");
-            console.log(serverResponse);
             showPopup();
-        });
+        }
+        
+        )
+        .catch(error => console.error(error));
 
     }
 

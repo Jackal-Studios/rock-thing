@@ -199,11 +199,11 @@ def parse_output(foldername):
     return data
     
 
-def get_output(soilgrids_data, weather_data, iterations):
+def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years):
     foldername = generate_unique_filename()
     create_input_folder(foldername)
 
-    allData = quantum.runAll(soilgrids_data, weather_data, iterations)
+    allData = quantum.runAll(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
     for i in range(iterations):
         create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], allData["bulkdense"], i, foldername)
         run_simulation(foldername) 
@@ -211,7 +211,10 @@ def get_output(soilgrids_data, weather_data, iterations):
 
 def handle_json_request(data):
     # do stuff
-    # send stuff like this get_output(soilgrids_data, weather_data, iterations)
-
+    # send stuff like this get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
+    print(data) #get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
+    inputs = data['inputs']
+    out = get_output(data['soilData'], data['weatherData'],inputs.get('number_of_occurrences'), inputs.get('mode'), inputs.get('feedstock_surface_density'), inputs.get('desired_area'), inputs.get('time_series_years'))
+    return out
     # for testing:
-    return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
+    # return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])

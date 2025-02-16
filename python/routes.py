@@ -88,6 +88,18 @@ def save_soil_data():
     resp = crunchflow.handle_json_request(data)
 
     return resp
+
+@main_routes.route('/save_data', methods=['POST'])
+def save_data():
+    data = request.json
+    # print(data)
+    # sent the output to the parse output and return
+
+    # resp = crunchflow.get_output(data)
+    # resp = crunchflow.handle_json_request(data)
+    resp = crunchflow.handle_json_request(data)
+
+    return resp
     
 
 # @main_routes.route('/tst')
