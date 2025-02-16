@@ -11,6 +11,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
     <div id="map"></div>
@@ -19,15 +20,28 @@
         <div id="search-box"></div>
         <div id="menu">
             <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked">
-            <label for="satellite-streets-v12">Satellite Streets</label>
+            <label for="satellite-streets-v12">Satellite</label>
             <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors">
-            <label for="outdoors-v12">Outdoors</label>
+            <label for="outdoors-v12">Terrain</label>
         </div>
     </div>
     
+    
+
     <div class="sidebar">
+        <div class="top-controls">
+            <button id="run-button">Run</button>
+
+            <div class="mode-toggle">
+                <input type="radio" id="basic-mode" name="mode-toggle" value="basic" checked>
+                <label for="basic-mode">Basic</label>
+                <input type="radio" id="advanced-mode" name="mode-toggle" value="advanced">
+                <label for="advanced-mode">Advanced</label>
+            </div>
+        </div>
+        
         <div class="dropdown-box">
-            <label for="dropdown1">Rock Types:</label>
+            <label for="dropdown1">Rock Type:</label>
             <select id="dropdown1">
                 <option value="basalt">Basalt</option>
                 <option value="olivine">Olivine</option>
@@ -42,11 +56,41 @@
         </div>
     
         <div class="input-box">
-            <label for="input-text">Desired Area (m²):</label>
-            <input type="text" id="input-text">
+            <label for="area-text">Desired Area (m²):</label>
+            <input type="text" id="area-text">
         </div>
-    
-        <button id="run-button">Run</button>
+
+        <div class="input-box">
+            <label for="feedstock-text">Feedstock Surface Density (kg/m²):</label>
+            <input type="text" id="feedstock-text">
+        </div>
+
+        <div class="input-box">
+            <label for="customSlider">Time Series (Years):</label>
+            <input type="range" min="0" max="3" value="0" id="customSlider">
+            <div class="metrics">
+                <span>50</span>
+                <span>100</span>
+                <span>150</span>
+                <span>200</span>
+            </div>
+        </div>
+        
+        <div id="advanced-options" style="display: none;">
+            <div class="input-box">
+                <label for="occurrences-text">Number of Occurrences (N):</label>
+                <input type="text" id="occurrences-text">
+            </div>
+            
+            <label for="quantum-classical-toggle" class="bold-label">Random Sampler:</label>
+            <div class="quantum-classical-toggle" id="quantum-classical-toggle">
+                <input type="radio" id="classical" name="quantum-toggle" value="classical" checked>
+                <label for="classical">Classical</label>
+                <input type="radio" id="quantum" name="quantum-toggle" value="quantum">
+                <label for="quantum">Quantum</label>
+            </div>
+        </div>
+
     </div>
     
     <div id="modal" class="modal">
@@ -54,9 +98,30 @@
             <p id="modal-message"></p>
         </div>
     </div>
+
+    <div class="popup-overlay" id="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="hidePopup()">&times;</span>
+            <div id="chart-container">
+                <canvas id="timeSeriesChart"></canvas>
+            </div>
+        </div>
+    </div>
     
     <script src="{{ url_for('static', filename='apicalls.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
     <!-- <script src="{{ url_for('static', filename='apicalls.js') }}" defer></script> -->
+    <script>
+        document.querySelectorAll('input[name="mode-toggle"]').forEach(el => {
+            el.addEventListener('change', function () {
+                const advancedOptions = document.getElementById('advanced-options');
+                if (document.getElementById('advanced-mode').checked) {
+                    advancedOptions.style.display = 'block';
+                } else {
+                    advancedOptions.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
