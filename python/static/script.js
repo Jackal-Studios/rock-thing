@@ -18,6 +18,186 @@ document.querySelectorAll('input[name="mode-toggle"]').forEach(el => {
     });
 });
 
+// Constants
+const EARTH_RADIUS_KM = 6367;
+const MILES_PER_KM = 0.621371;
+const TOP_N = 3; // Choose how many top entries you want
+
+// Helper function to convert degrees to radians
+function toRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
+// Function to calculate the distance between two points using the Haversine formula
+function getDistance(lon1, lat1, lon2, lat2) {
+    lon1 = toRadians(lon1);
+    lat1 = toRadians(lat1);
+    lon2 = toRadians(lon2);
+    lat2 = toRadians(lat2);
+
+    const dlon = lon2 - lon1;
+    const dlat = lat2 - lat1;
+
+    const a = Math.sin(dlat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
+    const c = 2 * Math.asin(Math.sqrt(a));
+
+    const distanceKm = EARTH_RADIUS_KM * c;
+    const distanceMiles = distanceKm * MILES_PER_KM;
+
+    return distanceMiles;
+}
+
+// Fetch and parse CSV data from the URLs
+async function fetchAndParseCSV(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch CSV data from ${url}`);
+    }
+    const csvText = await response.text();
+    return parseCSV(csvText);
+}
+
+function parseCSV(csvText) {
+    const [headerLine, ...lines] = csvText.split('\n');
+    const headers = headerLine.split(',');
+
+    const validRows = lines.filter(line => !isNaN(line.charAt(0)));
+
+    return validRows.map(line => {
+        const values = line.split(',');
+        return {
+            Latitude: values[12],
+            Longitude: values[13]
+        };
+    });
+}
+
+// Fetch and compile top N longitudes and latitudes
+async function fetchTopLocations(latitude, longitude, commodity, topN) {
+    const locations = [
+        [-90, -180], [-61.085498574354446, -180], [-61.085498574354446, -128.57142857142856],
+        [-61.085498574354446, -77.14285714285712], [-61.085498574354446, -25.714285714285694],
+        [-61.085498574354446, 25.714285714285737], [-61.085498574354446, 77.14285714285717],
+        [-61.085498574354446, 128.5714285714286], [-32.17099714870889, -180],
+        [-32.17099714870889, -147.27272727272728], [-32.17099714870889, -114.54545454545456],
+        [-32.17099714870889, -81.81818181818184], [-32.17099714870889, -49.090909090909115],
+        [-32.17099714870889, -16.363636363636388], [-32.17099714870889, 16.36363636363634],
+        [-32.17099714870889, 49.090909090909065], [-32.17099714870889, 81.81818181818178],
+        [-32.17099714870889, 114.5454545454545], [-32.17099714870889, 147.27272727272722],
+        [-32.17099714870889, 179.99999999999994], [-3.2564957230633382, -180],
+        [-3.2564957230633382, -152.30769230769232], [-3.2564957230633382, -124.61538461538463],
+        [-3.2564957230633382, -96.92307692307693], [-3.2564957230633382, -69.23076923076924],
+        [-3.2564957230633382, -41.53846153846155], [-3.2564957230633382, -13.846153846153854],
+        [-3.2564957230633382, 13.84615384615384], [-3.2564957230633382, 41.53846153846153],
+        [-3.2564957230633382, 69.23076923076923], [-3.2564957230633382, 96.92307692307692],
+        [-3.2564957230633382, 124.61538461538461], [-3.2564957230633382, 152.30769230769232],
+        [25.658005702582216, -180], [25.658005702582216, -150.0], [25.658005702582216, -120.0],
+        [25.658005702582216, -90.0], [25.658005702582216, -60.0], [25.658005702582216, -30.0],
+        [25.658005702582216, 0.0], [25.658005702582216, 30.0], [25.658005702582216, 60.0],
+        [25.658005702582216, 90.0], [25.658005702582216, 120.0], [25.658005702582216, 150.0],
+        [54.57250712822777, -180], [54.57250712822777, -135.0], [54.57250712822777, -90.0],
+        [54.57250712822777, -45.0], [54.57250712822777, 0.0], [54.57250712822777, 45.0],
+        [54.57250712822777, 90.0], [54.57250712822777, 135.0], [83.48700855387332, -180],
+        [83.48700855387332, 0.0]
+    ];
+
+    // Function to find locations within 1000 miles
+    function locationsWithin1000Miles(locations, lat, lon) {
+        const nearbyLocations = [];
+        locations.forEach(location => {
+            const distance = getDistance(lon, lat, location[1], location[0]);
+            if (distance <= 1000) {
+                nearbyLocations.push(location);
+            }
+        });
+        return nearbyLocations;
+    }
+
+    // Get nearby locations within 1000 miles
+    const nearbyLocations = locationsWithin1000Miles(locations, latitude, longitude);
+
+    // Generate filenames
+    const files = nearbyLocations.map(location =>
+        `https://raw.githubusercontent.com/K-Crawford/national-mine-repo/refs/heads/main/${commodity}%3A${location[0]}%3A${location[1]}.csv`
+    );
+
+    // Fetch and compile top N longitudes and latitudes
+    async function fetchTopNLongLat(topN) {
+        const promises = files.map(fetchAndParseCSV);
+        const allCSVData = await Promise.all(promises);
+        let allLocations = [];
+
+        allCSVData.forEach(data => {
+            data.forEach(record => {
+                if (record.Latitude && record.Longitude) {
+                    allLocations.push({ latitude: parseFloat(record.Latitude), longitude: parseFloat(record.Longitude) });
+                }
+            });
+        });
+
+        allLocations.sort((a, b) => b.latitude - a.latitude); // Example sort: by latitude in descending order
+
+        return allLocations.slice(0, topN);
+    }
+
+    return fetchTopNLongLat(topN);
+}
+
+// map.on('load', () => {
+//     document.getElementById('map-toggle').addEventListener('change', function () {
+//         if (this.checked) {
+//             console.log('Toggle is ON');
+
+//             var featureCollection = []; // Initialize empty collection
+
+//             // Your longLat collection
+//             var longLat = fetchTopLocations(centerPoint[1], centerPoint[0], document.getElementById("dropdown1").value, 3)
+
+//             // for every item object within longLat
+//             for(var itemIndex in longLat) {
+//             // push new feature to the collection
+//                 featureCollection.push({
+//                     "type": "Feature",
+//                     "geometry": {
+//                     "type": "Point",
+//                     "coordinates": longLat[itemIndex]
+//                     },
+//                     "properties": {
+//                     "title": "Mapbox DC",
+//                     "icon": "monument"
+//                     }
+//                 });
+//             }
+
+//             map.on('load', function () {
+//                 map.addLayer({
+//                   "id": "points",
+//                   "type": "symbol",
+//                   "source": {
+//                   "type": "geojson",
+//                     "data": {
+//                       "type": "FeatureCollection",
+//                       "features": featureCollection 
+//                     }
+//                   },
+//                   "layout": {
+//                     "icon-image": "{icon}-15",
+//                     "text-field": "{title}",
+//                     "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+//                     "text-offset": [0, 0.6],
+//                     "text-anchor": "top"
+//                   }
+//                 });
+//             });
+//         } else {
+//             console.log('Toggle is OFF');
+//             if (map.getLayer('points')) {
+//                 map.removeLayer('points');
+//             }
+//         }
+//     });
+// });
+
 // map.on('load', () => {
 //     document.getElementById('map-toggle').addEventListener('change', function () {
 //         if (this.checked) {
