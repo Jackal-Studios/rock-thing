@@ -344,8 +344,116 @@ document.getElementById('run-button').addEventListener('click', function() {
     loadingScreen();
     
     if (centerPoint) {
-        apicalls.sendCoordinates(centerPoint[1], centerPoint[0]); // Note: latitude comes first
+        apicalls.sendCoordinates(centerPoint[1], centerPoint[0]).then(serverResponse => {
+            // serverResponse will be just the final server response
+            data = serverResponse;
+            console.log("aaa");
+            console.log(serverResponse);
+            showPopup();
+        });
+
     }
+
 });
+
+let chart;
+
+function formatTime(value) {
+    return value;//.toFixed(2);//.toExponential(2);
+}
+
+function formatCa(value) {
+    return value.toExponential(6);
+}
+
+        function showPopup() {
+            document.getElementById('popup').classList.add('active');
+            if (!chart) {
+                createChart(data);  // Use the data from server response
+            }
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').classList.remove('active');
+        }
+
+        function createChart(serverData) {
+            const ctx = document.getElementById('timeSeriesChart').getContext('2d');
+            
+              // Calculate min and max for better scaling
+              const caValues = serverData["Ca++"];
+              const minCa = Math.min(...caValues);
+              const maxCa = Math.max(...caValues);
+              const range = maxCa - minCa;
+              
+              const dataPoints = serverData["Ca++"].map((value, index) => ({
+                x: index,  // Use index for equal spacing
+                y: value
+            }));
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: serverData["Time(yrs)"],
+                    datasets: [{
+                        label: 'Ca++ vs Time',
+                        data: serverData["Ca++"],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        pointRadius: 3,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'logarithmic',
+                            title: {
+                                display: true,
+                                text: 'Time (years)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatTime(value);
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Ca++ (mol/L)'
+                            },
+                            min: minCa - (range * 0.1),
+                            max: maxCa + (range * 0.1),
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCa(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Ca++: ${context.raw}`;
+                                },
+                                title: function(context) {
+                                    return `Time: ${formatTime(context[0].raw)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Close popup when clicking outside
+        document.getElementById('popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hidePopup();
+            }
+        });
+
 
 map.getCanvas().style.cursor = 'crosshair';
