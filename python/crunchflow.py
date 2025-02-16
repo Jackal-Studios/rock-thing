@@ -89,55 +89,38 @@ def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, 
     siltdense = 2.60
     # rates and density for feedstocks
     mineral_rates = {
-        "Basalt": -13.00,
-        "HCl(c)": -10.00,
-        "CO2_pump": -6.00,
-        "HNO3(c)": -10.00,
-        "Cs-Illite": -5.00,
-        "SO4_mod_NH3": -13.0,
-        "Fe(OH)3_mod_NH3": -14.144,
-        "MnO2_mod_NH3": -15.2,
-        "SO4_monod": -13.0,
-        "Fe(OH)3_monod": -14.144,
-        "Fe+++_monod": -14.144,
-        "MnO2_monod": -15.2,
-        "Gypsum": -6.00,
-        "Calcite": -6.19,
-        "Pyrite": -8.00,
-        "Fe(OH)2": -7.90,
-        "Fe(OH)3": -11.40,
-        "FeS(am)": -8.90,
-        "Vivianite": -8.0,
-        "Hydroxylapatite": -11.0,
-        "CARFAP": -11.0,
-        "PO4ads": -11.0,
-        "SiO2(am)": -11.8,
-        "Katoite": -9,
-        "CSH(1.8)": -9,
-        "Portlandite": -9,
-        "Aragonite": -8.10,
-        "Dolomite": -7.70,
-        "Magnesite": -9.40,
-        "Siderite": -8.90,
-        "CH2O_SO4": -12.40,
-        "Iron": -11.30,
-        "Muscovite": -13.00,
-        "Quartz": -13.39,
-        "Kaolinite": -13.00,
-        "Ilmenite": -13.00,
-        "Smectite-MgFeStef": -13.00,
-        "K-Feldspar": -13.00,
-        "Gibbsite": -10.00,
-        "CO2(c)": -13.00,
-        "Chalcedony": -13.39,
-        "Ettringite": -8.00,
-        "Chrysocolla": -7.00,
-        "Goethite": -7.00,
-        "Jarosite": -6.00,
-        "Jurbanite": -6.00,
-        "Alunite": -7.00,
-        "Wollastonite": -13.00,
-        "Larnite": -13.00
+        "Basalt": (-13.00, 3.01),
+        "HCl(c)": (-10.00, 1.03),
+        "CO2_pump": (-6.00, 1.98),
+        "HNO3(c)": (-10.00, 1.51),
+        "Cs-Illite": (-5.00, 275),
+        "Gypsum": (-6.00, 2.3),
+        "Calcite": (-6.19, 2.71),
+        "Pyrite": (-8.00, 5),
+        "Vivianite": (-8.0, 2.65),
+        "Hydroxylapatite": (-11.0, 3.05),
+        "Katoite": (-9, 2.79),
+        "Portlandite": (-9, 2.23),
+        "Aragonite": (-8.10, 2.93),
+        "Dolomite": (-7.70, 2.84),
+        "Magnesite": (-9.40, 3.05),
+        "Siderite": (-8.90, 3.96),
+        "Iron": (-11.30, 7.86),
+        "Muscovite": (-13.00, 2.85),
+        "Quartz": (-13.39, 2.65),
+        "Kaolinite": (-13.00, 2.65),
+        "Ilmenite": (-13.00, 4.45),
+        "K-Feldspar": (-13.00, 2.60),
+        "Gibbsite": (-10.00, 2.34),
+        "Chalcedony": (-13.39, 2.62),
+        "Ettringite": (-8.00, 1.80),
+        "Chrysocolla": (-7.00, 2.10),
+        "Goethite": (-7.00, 4.0),
+        "Jarosite": (-6.00, 3.25),
+        "Jurbanite": (-6.00, 1.79),
+        "Alunite": (-7.00, 2.75),
+        "Wollastonite": (-13.00, 2.84),
+        "Larnite": (-13.00, 3.28)
     }
     
     rate = mineral_rates[feedstock][0]
@@ -190,13 +173,12 @@ def create_input_file(years, feedstock, claypercent, siltpercent, temp, precip, 
         file.write(content)
 
     print(f"File 'aEWsoil_{file_num}.in' has been created successfully.")
-
+    run_simulation(f'aEWsoil_{file_num}.in', foldername) 
     
 
 # docker exec topcrunch-custom bash -c "cd /home/crunch_user/files && CrunchTope aEWbinary.in"
-def run_simulation(input_data, foldername):
-    # run crunchflow
-    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && CrunchTope {inputfilename} && ls"')
+def run_simulation(input_file, foldername):
+    return run_command(f'bash -c "cd /home/crunch_user/files/{foldername} && CrunchTope {input_file} && ls"')
 
 
 def create_input_folder(foldername):
@@ -224,5 +206,4 @@ def get_output(soilgrids_data, weather_data, iterations):
     allData = runAll(soilgrids_data, weather_data, iterations)
     for i in range(iterations):
         create_input_file(allData["years"][i], allData["feedstock"][i], allData["clay"][i], allData["silt"][i], allData["temperature"][i], allData["precipitation"][i], allData["cec"][i], allData["spread"][i], allData["bulkdense"], i, foldername)
-        run_simulation(foldername) 
     return parse_output(foldername)    # run crunchtop
