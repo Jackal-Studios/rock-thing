@@ -18,8 +18,6 @@ def getRandomSample(n, left, mode, right):
         how_many = int(count / bin_count_sum * num_of_bins * 5)
         new_list.extend([center] * how_many)
 
-    # print(f"Created list size: {len(new_list)}")
-
     def quantum_random_int(max_value):
         num_qubits = (max_value - 1).bit_length()
         circuit = QuantumCircuit(num_qubits)
@@ -43,43 +41,48 @@ def getRandomSample(n, left, mode, right):
 
     return random_samples
 
-n = 10
+def runAll(soiljson, weatherjson, n):
+    
+    samples = {}
 
-#soilgrids
+    for layer in soiljson["properties"]["layers"]:
+        property_name = layer["name"]
+        values = layer["depths"][0]["values"]
+        left, mode, right = values["Q0.05"], values["Q0.5"], values["Q0.95"]
+        soil_samples = getRandomSample(n, left, mode, right)
+        samples[property_name] = soil_samples
 
-with open('soilgrids.json', 'r') as file:
+    weather_result = weatherjson['result'][0]
+
+    #precipitation
+    precipitation_stats = weather_result['precipitation']
+
+    left, mode, right = precipitation_stats["min"], precipitation_stats["mean"], precipitation_stats["max"]
+
+    precip_samples = getRandomSample(n, left, mode, right)
+
+    samples["precipitation"] = precip_samples
+
+    #temperature
+    temp_stats = weather_result['temp']
+
+    left, mode, right = temp_stats["record_min"], temp_stats["mean"], temp_stats["record_max"]
+
+    temp_samples = getRandomSample(n, left, mode, right)
+
+    for temp in range(len(temp_samples)):
+        if temp_samples[temp] < 25:
+            temp_samples[temp] = 25
+    
+    samples["temperature"] = temp_samples
+
+    return samples
+
+with open('soilgridall.json', 'r') as file:
     soilgrids_data = json.load(file)
 
-values = soilgrids_data["properties"]["cec"]["depths"][0]["values"]
-
-left, mode, right = values["Q0.05"], values["Q0.5"], values["Q0.95"]
-
-soil_samples = getRandomSample(n, left, mode, right)
-
-#weather
 with open('weather.json', 'r') as file:
     weather_data = json.load(file)
 
-result = weather_data['result'][0]
-
-#precipitation
-precipitation_stats = result['precipitation']
-
-left, mode, right = precipitation_stats["min"], precipitation_stats["mean"], precipitation_stats["max"]
-
-precip_samples = getRandomSample(n, left, mode, right)
-
-#temperature
-temp_stats = result['temp']
-
-left, mode, right = temp_stats["record_min"], temp_stats["mean"], temp_stats["record_max"]
-
-temp_samples = getRandomSample(n, left, mode, right)
-
-for temp in range(len(temp_samples)):
-    if temp_samples[temp] < 25:
-        temp_samples[temp] = 25
-
-print("SOIL SAMPLES:", soil_samples)
-print("PRECIPITATION SAMPLES:", precip_samples)
-print("TEMP SAMPLES:", temp_samples)
+output = runAll(soilgrids_data, weather_data, 10)
+print(output)

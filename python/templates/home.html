@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Rock Map</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
-    <!-- Mapbox and TurfJS -->
+    <title>Rock Map</title>
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
@@ -18,17 +16,16 @@
     <div id="map"></div>
     
     <div id="search-and-menu">
-      <div id="search-box"></div>
-      <div id="menu">
-          <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked">
-          <label for="satellite-streets-v12">satellite streets</label>
-          <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors">
-          <label for="outdoors-v12">outdoors</label>
-      </div>
+        <div id="search-box"></div>
+        <div id="menu">
+            <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked">
+            <label for="satellite-streets-v12">Satellite Streets</label>
+            <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors">
+            <label for="outdoors-v12">Outdoors</label>
+        </div>
     </div>
     
     <div class="sidebar">
-        <!-- Dropdown for rock types -->
         <div class="dropdown-box">
             <label for="dropdown1">Rock Types:</label>
             <select id="dropdown1">
@@ -44,17 +41,14 @@
             </select>
         </div>
     
-        <!-- Custom input -->
         <div class="input-box">
             <label for="input-text">Desired Area (m²):</label>
             <input type="text" id="input-text">
         </div>
     
-        <!-- Run button -->
         <button id="run-button">Run</button>
     </div>
     
-    <!-- Modal for rock information -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <p id="modal-message"></p>

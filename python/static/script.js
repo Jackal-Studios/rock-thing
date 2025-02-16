@@ -29,25 +29,13 @@ window.addEventListener('load', () => {
     searchBox.marker = true;
     searchBox.mapboxgl = mapboxgl;
     map.addControl(searchBox);
-    map.addControl(new mapboxgl.NavigationControl()); // idk about that lowk
+    map.addControl(new mapboxgl.NavigationControl());
 });
 
 let centerPoint = null;
 let radiusCircle = null;
 let isDragging = false;
 let select_clicks = 0;
-
-const rockInfo = {
-    basalt: "Basalt: A volcanic rock widely used in ERW due to its availability and effectiveness in capturing carbon dioxide. It can sequester up to 2 tons of CO2 per hectare per year.",
-    olivine: "Olivine: A magnesium and iron-rich rock that weathers quickly, providing fast carbon sequestration. It can capture up to 5 tons of CO2 per hectare per year.",
-    serpentinite: "Serpentinite: A magnesium-rich rock high in nickel, capable of capturing up to 0.5 tons of CO2 per hectare per year.",
-    wollastonite: "Wollastonite: A calcium silicate mineral found in skarns, which has potential for CO2 sequestration.",
-    glauconite: "Glauconite: Also known as greensand, this iron potassium phyllosilicate has known plant nutritional properties and is effective in capturing carbon.",
-    kimberlite: "Kimberlite: A mineralogically complex feedstock with vast capacities to sequester carbon dioxide.",
-    brucite: "Brucite: A magnesium hydroxide mineral that can be used as a feedstock for ERW.",
-    feldspar: "Feldspar: A group of rock-forming tectosilicate minerals that can release potassium during weathering.",
-    apatite: "Apatite: A phosphate mineral that can release phosphorus during weathering, potentially reducing the need for chemical fertilizers."
-};
 
 function createRadiusCircle(radius) {
     const options = { steps: 64, units: 'kilometers' };
@@ -111,16 +99,12 @@ function updateCircle(e) {
 
 
 document.getElementById('run-button').addEventListener('click', function() {
-    const selectedRock = document.getElementById('dropdown1').value;
-    const message = rockInfo[selectedRock];
-    const modalMessage = document.getElementById('modal-message');
-    modalMessage.innerText = message;
-    const modal = document.getElementById('modal');
-    modal.style.display = 'block';
-
     if (centerPoint) {
         apicalls.sendCoordinates(centerPoint[1], centerPoint[0]); // Note: latitude comes first
     }
+
+    // const selectedRock = document.getElementById('dropdown1').value;
+    // progressBar(selectedRock, 500, 2000); 
 });
 
 map.getCanvas().style.cursor = 'crosshair';
