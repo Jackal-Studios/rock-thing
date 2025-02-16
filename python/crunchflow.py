@@ -128,4 +128,5 @@ def get_output(input_data):
     # loop over
     run_simulation(input_data, foldername, "aEWbinary.in")  #TODO change this ?
     # print("input folder created")
-    return parse_output(foldername)    # run crunchtop
+    # return parse_output(foldername)    # run crunchtop
+    return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])

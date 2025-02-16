@@ -341,7 +341,7 @@ function loadingScreen() {
 
 // Trigger the loading screen when needed
 document.getElementById('run-button').addEventListener('click', function() {
-    loadingScreen();
+    // loadingScreen();
     
     if (centerPoint) {
         apicalls.sendCoordinates(centerPoint[1], centerPoint[0]).then(serverResponse => {
