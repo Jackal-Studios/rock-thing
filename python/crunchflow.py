@@ -258,12 +258,12 @@ def parse_output(n, foldername):
 
 
 
-def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years):
+def get_output(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years, lat, lon):
     bulkdensity = 3.0 #allData["bulkdense"]
     foldername = generate_unique_filename()
     create_input_folder(foldername)
     print("running algorithms #")
-    allData = quantum.runAll(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years)
+    allData = quantum.runAll(soilgrids_data, weather_data, iterations, is_quantum, feedstock, spread, years, lat, lon)
     print("ALL DATA:")
     print(allData)
     print("############################################################")
@@ -284,7 +284,7 @@ def handle_json_request(data):
     # print(weather_data)
     print(inputs.get('number_of_occurrences'))
     print(f"feedstockden:{inputs.get('feedstock_surface_density')}")
-    out = get_output(data['soilData'], weather_data ,inputs.get('number_of_occurrences'), inputs.get('mode'), inputs.get('rock_type'), inputs.get('feedstock_surface_density'), inputs.get('time_series_years'))
+    out = get_output(data['soilData'], weather_data ,inputs.get('number_of_occurrences'), inputs.get('mode'), inputs.get('rock_type'), inputs.get('feedstock_surface_density'), inputs.get('time_series_years'), inputs.get('latitude'), inputs.get('longitude'))
     # return read_and_package(f'/home/crunch_user/files/timeEW2m.out', ['Time(yrs)','pH', 'Ca++'])
     return out
     # for testing:
