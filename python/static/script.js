@@ -650,6 +650,7 @@ document.getElementById('run-button').addEventListener('click', function() {
 
         // start showing loading screen
         loaded = false;
+        currentProgress = 0;
         loadingScreen();
 
         sendCoordinates(inputs)
@@ -664,10 +665,13 @@ document.getElementById('run-button').addEventListener('click', function() {
             currentProgress = 100;
             prog_fill = document.getElementById('prog-bar');
             updateProgressBar(prog_fill, currentProgress);
-        
+            
             setTimeout(() => {
-                modalOverlay = document.getElementById('modal-overlay');
-                document.body.removeChild(modalOverlay);
+                // modalOverlay = document.getElementById('modal-overlay');
+                // modalOverlay.style.display = 'none';
+                modalOverlay.parentNode.removeChild(modalOverlay);
+                // modalOverlay.display='none';
+                // document.body.removeChild(modalOverlay);
                 showPopup();
 
             }, 360); 
