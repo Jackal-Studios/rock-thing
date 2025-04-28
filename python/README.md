@@ -6,8 +6,8 @@ other stuff
 
 
 
-HOW TO RUN THIS SHIT:
-insttuctions:
+HOW TO RUN THIS:
+instructions:
 
 to build and run
 sudo docker compose up --build
