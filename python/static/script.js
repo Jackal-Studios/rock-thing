@@ -653,7 +653,7 @@ document.getElementById('run-button').addEventListener('click', function() {
         currentProgress = 0;
         loadingScreen();
 
-        sendCoordinates(inputs)
+        apicalls.sendCoordinates(inputs)
         .then(result => {
             console.log(result);
             data = result;
